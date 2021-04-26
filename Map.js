@@ -72,7 +72,7 @@ svg.append("g")
 .attr("class", "brush")
 .call(d3.brushX()
 .extent([[0, 0], [Brushwidth, Brushheight]])
-.on("brush", brush));
+.on("end", brush));
 
 function brush() {
 	if (!d3.event.sourceEvent) return; // Only transition after input.
