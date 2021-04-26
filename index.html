@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Formula 1 Boss</title>
+	<meta name="author" content="Thomas Berger, Pierre Bouquet, Eliot Walt">
+
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div>
+		<div>
+
+
+
+			<svg id="timescale"  viewBox="0 0 1000 100" width="100%">
+				<style>
+				.area {
+					fill: lightsteelblue;
+				}
+
+				.axis--grid .domain {
+					fill: #ddd;
+					stroke: none;
+				}
+
+				.axis--x .domain,
+				.axis--grid .tick line {
+					stroke: #fff;
+				}
+
+				.axis--grid .tick--minor line {
+					stroke-opacity: .5;
+				}
+
+
+				</style>
+
+
+			</svg>
+		</div>
+		<div>
+
+			<svg id="map"  viewBox="0 0 1000 1000" width="100%">
+				<style>
+
+				.graticule {
+					fill: none;
+					stroke: #000;
+					stroke-width: .5px;
+					stroke-opacity: .5;
+				}
+				.sphere {
+					fill: #7BB5FF;
+					fill-opacity: 0.5;
+					stroke: #000;
+					stroke-width: 1px;
+					stroke-opacity: .5;
+				}
+				.country {
+					fill: #eee;
+					fill-opacity: 1;
+					stroke: #888;
+					stroke-width: 1px;
+				}
+
+
+				</style>
+
+
+			</svg>
+		</div>
+	</div>
+
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://d3js.org/topojson.v1.min.js"></script>
+	<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+	<script src="Map.js"></script>
+	<script src="Brush.js"></script>
+	<!--<script src="Map_with_brush.js"></script>-->
+
+	<!--  Map_round  Map_rect  Map_rotating  -->
+</body>
+</html>
