@@ -1,30 +1,26 @@
-var margin = {top: 10, right: 10, bottom: 40, left: 10}
-var width = 1000 - margin.left - margin.right;
-var height = 100 - margin.top - margin.bottom;
-
-console.log(width)
+var Brushmargin = {top: 10, right: 10, bottom: 40, left: 10}
+var Brushwidth = 1000 - Brushmargin.left - Brushmargin.right;
+var Brushheight = 100 - Brushmargin.top - Brushmargin.bottom;
 
 var x = d3.scaleTime()
     .domain([new Date(1950, 1, 1), new Date(2021,1, 1) - 1])
-    .rangeRound([0, width]);
+    .rangeRound([0, Brushwidth]);
 
-var svg = d3.select("#timescale").attr("transform", "translate(" + margin.left + ",0)")
-
-
+var svg = d3.select("#timescale").attr("transform", "translate(" + Brushmargin.left + ",0)")
 
 svg.append("g")
     .attr("class", "axis axis--grid")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + Brushheight + ")")
     .call(d3.axisBottom(x)
         .ticks(d3.timeYear)
-        .tickSize(-height)
+        .tickSize(-Brushheight)
         .tickFormat(function() { return null; }))
   .selectAll(".tick")
     .classed("tick--minor", function(d) { return d3.timeYear(); });
 
 svg.append("g")
     .attr("class", "axis axis--x")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + Brushheight + ")")
     .call(d3.axisBottom(x)
         .ticks(d3.timeYear)
         .tickPadding(0))
@@ -32,13 +28,10 @@ svg.append("g")
   .selectAll("text")
     .attr("x", 6).attr("transform", "rotate(90) translate(0,-10)")
 
-
-
-
 svg.append("g")
     .attr("class", "brush")
     .call(d3.brushX()
-        .extent([[0, 0], [width, height]])
+        .extent([[0, 0], [Brushwidth, Brushheight]])
         .on("end", brush));
 
 function brush() {

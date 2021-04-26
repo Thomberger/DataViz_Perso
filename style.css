@@ -26,6 +26,7 @@ html, body, figure {
 	border: 0;
 }
 
+
 /* Default font and size */
 body {
 
@@ -70,4 +71,9 @@ canvas {
 	left: 0;
 	width: 100%;
 	height: auto;
+}
+
+.center {
+  margin: auto;
+	width: 80%;
 }
