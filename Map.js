@@ -40,10 +40,16 @@ const locations_dataset = d3.csv('Data_processed/races.csv').then(function(data)
 const locations =  locations_dataset.then(function(value) {
 	return Promise.all(value.map(function(results){return [results.year,projection([results.lng, results.lat]),results.name];}))}).then(function(data){return data;});
 
-const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed);
-Mapsvg.call(zoom);
+const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed)
+Mapsvg.call(zoom).on("dblclick.zoom",reset_zoom)
+
+function reset_zoom(){
+	d3.event.transform = d3.zoomIdentity
+	zoomed()
+	}
+
 function zoomed(){
-			d3.event.transform.k = Math.round(d3.event.transform.k * 100) / 100
+			d3.event.transform.k = Math.round(d3.event.transform.k * 10) / 10
 
       	g.selectAll('path') // To prevent stroke width from scaling
         .attr('transform', d3.event.transform);
