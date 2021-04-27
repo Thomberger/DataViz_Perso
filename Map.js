@@ -18,7 +18,8 @@ const Mapheight = 1000;
 
 var minYear = 1950
 var maxYear = 2020
-r=2
+r = 2
+bigr = 5
 
 var Brushmargin = {top: 10, right: 10, bottom: 40, left: 10}
 var Brushwidth = 1000 - Brushmargin.left - Brushmargin.right;
@@ -103,6 +104,7 @@ var tooltip = d3.select("#map-container").append("div")
 function tipMouseover(d) {
 	console.log(d)
 		this.setAttribute("class", "circle-hover"); // add hover class to emphasize
+		this.setAttribute("r",bigr)
 
 		var html  = "<span>" + d[2] + " </span><br/>" +
 								"Count: TODO " ;
@@ -118,6 +120,7 @@ function tipMouseover(d) {
 // tooltip mouseout event handler
 function tipMouseout(d) {
 		this.classList.remove("circle-hover"); // remove hover class
+		this.setAttribute("r",r)
 
 		tooltip.transition()
 				.duration(500) // ms
