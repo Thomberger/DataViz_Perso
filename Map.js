@@ -18,6 +18,7 @@ const Mapheight = 1000;
 
 var minYear = 1950
 var maxYear = 2020
+r=2
 
 var Brushmargin = {top: 10, right: 10, bottom: 40, left: 10}
 var Brushwidth = 1000 - Brushmargin.left - Brushmargin.right;
@@ -31,12 +32,11 @@ const Mapsvg = d3.select("#map").attr('Mapwidth', Mapwidth).attr('Mapheight', Ma
 const path = d3.geoPath().projection(projection);
 const locations_dataset = d3.csv('Data_processed/races.csv').then(function(data){return data;});
 const locations =  locations_dataset.then(function(value) {
-	return Promise.all(value.map(function(results){return [results.year,projection([results.lng, results.lat])];}))}).then(function(data){return data;});
+	return Promise.all(value.map(function(results){return [results.year,projection([results.lng, results.lat]),results.name];}))}).then(function(data){return data;});
 
 drawGraticule();
 drawGlobe();
-var filteredData = locations.then(function(data) {updateMapPoints(getCol(data,1));})
-
+updateData(1950,2020)
 
 
 //////////////////////////////////////
@@ -92,6 +92,37 @@ function brush() {
 }
 
 
+//////////////////////////////////////
+// Tool tip
+
+var tooltip = d3.select("#map-container").append("div")
+		.attr("class", "tooltip")
+		.style("opacity", 0);
+
+// tooltip mouseover event handler
+function tipMouseover(d) {
+	console.log(d)
+		this.setAttribute("class", "circle-hover"); // add hover class to emphasize
+
+		var html  = "<span>" + d[2] + " </span><br/>" +
+								"Count: TODO " ;
+
+		tooltip.html(html)
+				.style("left", (d3.event.pageX + 15) + "px")
+				.style("top", (d3.event.pageY - 28) + "px")
+			.transition()
+				.duration(200) // ms
+				.style("opacity", .9) // started as 0!
+};
+
+// tooltip mouseout event handler
+function tipMouseout(d) {
+		this.classList.remove("circle-hover"); // remove hover class
+
+		tooltip.transition()
+				.duration(500) // ms
+				.style("opacity", 0); // don't care about position!
+};
 
 
 function drawGlobe() {
@@ -111,14 +142,12 @@ function drawGlobe() {
 }
 
 function updateData(minYear,maxYear){
-	console.log(minYear,maxYear)
-
 	// Circuits
 		locations.then(function(data){
 			var filteredData = []
 			data.forEach(function(d) {
-					if(d[0]>=minYear & d[0]<=maxYear){
-						filteredData.push(d[1])
+					if(d[0]>=minYear & d[0]<maxYear){
+						filteredData.push([d[0],d[1],d[2]])
 					}
 			})
 			updateMapPoints(filteredData)
@@ -126,27 +155,25 @@ function updateData(minYear,maxYear){
 	};
 
 	function updateMapPoints(data) {
-		console.log(data)
 		var circles = Mapsvg.selectAll("circle").data(data);
 
 		circles // update existing points
-		.attr("fill", 'steelblue')
-		.attr("cx",function(d) {if (d){console.log(d);return d[0]; }})
-		.attr("cy",function(d) {if (d){return d[1]; }})
-		.attr("r",1.5);
-		//.on("mouseover", tipMouseover)
-		//.on("mouseout", tipMouseout)
+		.attr("cx",function(d) {if (d){console.log(d[1][0]);return d[1][0]; }})
+		.attr("cy",function(d) {if (d){return d[1][1]; }})
+		.attr("r",r)
+		.on("mouseover", tipMouseover)
+		.on("mouseout", tipMouseout)
 
 		circles.exit() // exiting points
 		.remove();
 
 		circles.enter().append("circle") // new entering points
 		.attr("fill", 'steelblue')
-		.attr("cx", function(d) {if (d){return d[0] }})
-		.attr("cy", function(d) {if (d){return d[1] }})
-		.attr("r",  1.5);
-		//.on("mouseover", tipMouseover)
-		//.on("mouseout", tipMouseout)
+		.attr("cx", function(d) {if (d){return d[1][0] }})
+		.attr("cy", function(d) {if (d){return d[1][1] }})
+		.attr("r", r)
+		.on("mouseover", tipMouseover)
+		.on("mouseout", tipMouseout)
 
 
 	};
@@ -168,8 +195,3 @@ function updateData(minYear,maxYear){
        }
        return column;
     }
-
-	function addline(array,data){
-		array.push(data)
-		return array
-	}

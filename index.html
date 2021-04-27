@@ -13,27 +13,11 @@
 </head>
 <body>
 	<div >
-		<div>
+		<div class="timeline">
 
 			<svg id="timescale"  viewBox="0 0 1000 100" width="100%">
 				<style>
-				.area {
-					fill: lightsteelblue;
-				}
 
-				.axis--grid .domain {
-					fill: #ddd;
-					stroke: none;
-				}
-
-				.axis--x .domain,
-				.axis--grid .tick line {
-					stroke: #fff;
-				}
-
-				.axis--grid .tick--minor line {
-					stroke-opacity: .5;
-				}
 
 
 				</style>
@@ -41,30 +25,12 @@
 
 			</svg>
 		</div>
-		<div class="center">
+		<div class="map" id="map-container">
 
 			<svg id="map"  viewBox="0 0 1000 1000" width="100%">
 				<style>
 
-				.graticule {
-					fill: none;
-					stroke: #000;
-					stroke-width: .5px;
-					stroke-opacity: .5;
-				}
-				.sphere {
-					fill: #ADD1FF;
-					fill-opacity: 1;
-					stroke: #000;
-					stroke-width: 1px;
-					stroke-opacity: .5;
-				}
-				.country {
-					fill: #eee;
-					fill-opacity: 1;
-					stroke: #888;
-					stroke-width: 1px;
-				}
+
 
 
 				</style>
