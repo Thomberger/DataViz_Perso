@@ -49,7 +49,6 @@ function reset_zoom(){
 	}
 
 function zoomed(){
-			d3.event.transform.k = Math.round(d3.event.transform.k * 10) / 10
 
       	g.selectAll('path') // To prevent stroke width from scaling
         .attr('transform', d3.event.transform);
