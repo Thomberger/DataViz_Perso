@@ -18,8 +18,12 @@ const Mapheight = 1000;
 
 var minYear = 1950
 var maxYear = 2020
-r = 2
-bigr = 5
+init_r = 2
+r = init_r
+init_bigr = 5
+bigr = init_bigr
+init_stroke = 2
+stroke = init_stroke
 
 var Brushmargin = {top: 10, right: 10, bottom: 40, left: 10}
 var Brushwidth = 1000 - Brushmargin.left - Brushmargin.right;
@@ -29,11 +33,32 @@ var Brushheight = 100 - Brushmargin.top - Brushmargin.bottom;
 // Map
 
 const Mapsvg = d3.select("#map").attr('Mapwidth', Mapwidth).attr('Mapheight', Mapheight);
+const g = Mapsvg.append('g');
 
 const path = d3.geoPath().projection(projection);
 const locations_dataset = d3.csv('Data_processed/races.csv').then(function(data){return data;});
 const locations =  locations_dataset.then(function(value) {
 	return Promise.all(value.map(function(results){return [results.year,projection([results.lng, results.lat]),results.name];}))}).then(function(data){return data;});
+
+const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed);
+Mapsvg.call(zoom);
+function zoomed(){
+			d3.event.transform.k = Math.round(d3.event.transform.k * 100) / 100
+
+      	g.selectAll('path') // To prevent stroke width from scaling
+        .attr('transform', d3.event.transform);
+
+				r = init_r/d3.event.transform.k
+				bigr = init_bigr/d3.event.transform.k
+				stroke = init_stroke/d3.event.transform.k
+
+				g.selectAll('circle')
+				.attr('r',r)
+				.attr('transform', d3.event.transform)
+
+
+}
+
 
 drawGraticule();
 drawGlobe();
@@ -103,7 +128,8 @@ var tooltip = d3.select("#map-container").append("div")
 // tooltip mouseover event handler
 function tipMouseover(d) {
 	console.log(d)
-		this.setAttribute("class", "circle-hover"); // add hover class to emphasize
+		this.setAttribute("stroke-width", stroke)
+		this.setAttribute('stroke','black')
 		this.setAttribute("r",bigr)
 
 		var html  = "<span>" + d[2] + " </span><br/>" +
@@ -119,7 +145,8 @@ function tipMouseover(d) {
 
 // tooltip mouseout event handler
 function tipMouseout(d) {
-		this.classList.remove("circle-hover"); // remove hover class
+		this.setAttribute("stroke-width", 0);
+		this.setAttribute('stroke','none')
 		this.setAttribute("r",r)
 
 		tooltip.transition()
@@ -130,13 +157,13 @@ function tipMouseout(d) {
 
 function drawGlobe() {
 	// Sphere (ocean)
-	Mapsvg.insert("path", ".graticule")
+	g.insert("path", ".graticule")
 	.attr('class', 'sphere')
 	.attr('d', path({type: 'Sphere'}));
 
 	// Countries
-	d3.json('https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json').then(function(worldData) {
-		Mapsvg.selectAll(".segment")
+	d3.json('//unpkg.com/world-atlas@1/world/110m.json').then(function(worldData) {
+		g.selectAll(".segment")
 		.data(topojson.feature(worldData, worldData.objects.countries).features)
 		.enter().insert("path", "circle")
 		.attr("class", "country")
@@ -158,7 +185,7 @@ function updateData(minYear,maxYear){
 	};
 
 	function updateMapPoints(data) {
-		var circles = Mapsvg.selectAll("circle").data(data);
+		var circles = g.selectAll("circle").data(data);
 
 		circles // update existing points
 		.attr("cx",function(d) {if (d){console.log(d[1][0]);return d[1][0]; }})
@@ -171,7 +198,7 @@ function updateData(minYear,maxYear){
 		.remove();
 
 		circles.enter().append("circle") // new entering points
-		.attr("fill", 'steelblue')
+		.attr("fill", "#D20000")
 		.attr("cx", function(d) {if (d){return d[1][0] }})
 		.attr("cy", function(d) {if (d){return d[1][1] }})
 		.attr("r", r)
@@ -185,7 +212,7 @@ function updateData(minYear,maxYear){
 		const graticule = d3.geoGraticule()
 		.step([10, 10]);
 
-		Mapsvg.append("path")
+		g.append("path")
 		.datum(graticule)
 		.attr("class", "graticule")
 		.attr("d", path)
