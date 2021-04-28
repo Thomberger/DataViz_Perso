@@ -16,8 +16,8 @@ switch(proj) {
 const Mapwidth = 1000;
 const Mapheight = 1000;
 
-var minYear = 1950
-var maxYear = 2020
+var minYear = 2000
+var maxYear = 2021
 init_r = 2
 r = init_r
 init_bigr = 5
@@ -36,12 +36,15 @@ const Mapsvg = d3.select("#map").attr('Mapwidth', Mapwidth).attr('Mapheight', Ma
 const g = Mapsvg.append('g');
 
 const path = d3.geoPath().projection(projection);
-const locations_dataset = d3.csv('Data_processed/races.csv').then(function(data){return data;});
-const locations =  locations_dataset.then(function(value) {
-	return Promise.all(value.map(function(results){return [results.year,projection([results.lng, results.lat]),results.name];}))}).then(function(data){return data;});
+const locations = d3.csv('Data_processed/races.csv').then(function(data){return d3.nest()
+  .key(function(d) { return [d.circuitId, d.name,d.lat,d.lng]; })
+  .entries(data);});
+
 
 const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed)
 Mapsvg.call(zoom).on("dblclick.zoom",reset_zoom)
+
+
 
 function reset_zoom(){
 	d3.event.transform = d3.zoomIdentity
@@ -74,7 +77,7 @@ updateData(1950,2020)
 // Brush timeline
 
 var x = d3.scaleTime()
-.domain([new Date(1950, 1, 1), new Date(2021,1, 1) - 1])
+.domain([new Date(1950, 1, 1), new Date(2021,1, 1) ])
 .rangeRound([0, Brushwidth]);
 
 var svg = d3.select("#timescale").attr("transform", "translate(" + Brushmargin.left + ",0)")
@@ -103,21 +106,37 @@ svg.append("g")
 .attr("class", "brush")
 .call(d3.brushX()
 .extent([[0, 0], [Brushwidth, Brushheight]])
-.on("end", brush));
+.on("brush",brush)
+.on("end", brushend));
 
-function brush() {
+function brushend(){
 	if (!d3.event.sourceEvent) return; // Only transition after input.
-	if (!d3.event.selection) {updateData(1950,2020);return;}; // Ignore empty selections.
+	if (!d3.event.selection) {updateData(1950,2020);return;}; // empty selections = select all.
 	var d0 = d3.event.selection.map(x.invert),
 	d1 = d0.map(d3.timeYear.round);
-
 	// If empty when rounded, use floor & ceil instead.
 	if (d1[0] >= d1[1]) {
 		d1[0] = d3.timeYear.floor(d0[0]);
 		d1[1] = d3.timeYear.offset(d1[0]);
 	}
-
+	// round timeline
 	d3.select(this).transition().call(d3.event.target.move, d1.map(x));
+	// update with rounded data
+	updateData(d3.timeFormat("%Y")(d1[0]),d3.timeFormat("%Y")(d1[1]))
+
+}
+
+function brush() {
+	if (!d3.event.sourceEvent) return; // Only transition after input.
+	if (!d3.event.selection) {updateData(1950,2020);return;}; // empty selections = select all.
+	var d0 = d3.event.selection.map(x.invert),
+	d1 = d0.map(d3.timeYear.round);
+	// If empty when rounded, use floor & ceil instead.
+	if (d1[0] >= d1[1]) {
+		d1[0] = d3.timeYear.floor(d0[0]);
+		d1[1] = d3.timeYear.offset(d1[0]);
+	}
+	// update with rounded data
 	updateData(d3.timeFormat("%Y")(d1[0]),d3.timeFormat("%Y")(d1[1]))
 
 }
@@ -133,25 +152,23 @@ var tooltip = d3.select("#map-container").append("div")
 // tooltip mouseover event handler
 function tipMouseover(d) {
 	console.log(d)
-		this.setAttribute("stroke-width", stroke)
-		this.setAttribute('stroke','black')
+	this.setAttribute("class", "circle-hover"); // add hover class to emphasize
 		this.setAttribute("r",bigr)
 
-		var html  = "<span>" + d[2] + " </span><br/>" +
-								"Count: TODO " ;
+		var html  = "<span  style='font-weight:bold;color:#999999'>" + d[1] + " </span><br/>" +
+								"<span  style='color:#999999'>Count: " + d[2] + " races. </span>";
 
 		tooltip.html(html)
 				.style("left", (d3.event.pageX + 15) + "px")
 				.style("top", (d3.event.pageY - 28) + "px")
 			.transition()
 				.duration(200) // ms
-				.style("opacity", .9) // started as 0!
+				.style("opacity", 0.9) // started as 0!
 };
 
 // tooltip mouseout event handler
 function tipMouseout(d) {
-		this.setAttribute("stroke-width", 0);
-		this.setAttribute('stroke','none')
+	this.classList.remove("circle-hover"); // remove hover class
 		this.setAttribute("r",r)
 
 		tooltip.transition()
@@ -178,35 +195,39 @@ function drawGlobe() {
 
 function updateData(minYear,maxYear){
 	// Circuits
-		locations.then(function(data){
-			var filteredData = []
-			data.forEach(function(d) {
-					if(d[0]>=minYear & d[0]<maxYear){
-						filteredData.push([d[0],d[1],d[2]])
+	locations.then(function(data){
+		filteredData = []
+		data.forEach(function(d){
+			d.values.forEach(function (v){
+				if (v.year>=minYear & v.year<maxYear){
+					id = getCol(filteredData,0).indexOf(v.circuitId)
+					if (id==-1){
+						filteredData.push([v.circuitId,v.name,+1,projection([v.lng, v.lat])])
 					}
-			})
-			updateMapPoints(filteredData)
-		})
+					else{
+						filteredData[id][2] += 1
+					}
+		}})})
+	updateMapPoints(filteredData)})
 	};
 
 	function updateMapPoints(data) {
 		var circles = g.selectAll("circle").data(data);
 
 		circles // update existing points
-		.attr("cx",function(d) {if (d){console.log(d[1][0]);return d[1][0]; }})
-		.attr("cy",function(d) {if (d){return d[1][1]; }})
-		.attr("r",r)
+		.attr("cx",function(d) {if (d){return d[3][0]; }})
+		.attr("cy",function(d) {if (d){return d[3][1]; }})
+		.attr('r',r)
 		.on("mouseover", tipMouseover)
 		.on("mouseout", tipMouseout)
 
-		circles.exit() // exiting points
-		.remove();
+		circles.exit().remove() // exiting points
 
 		circles.enter().append("circle") // new entering points
 		.attr("fill", "#D20000")
-		.attr("cx", function(d) {if (d){return d[1][0] }})
-		.attr("cy", function(d) {if (d){return d[1][1] }})
-		.attr("r", r)
+		.attr("cx", function(d) {if (d){return d[3][0] }})
+		.attr("cy", function(d) {if (d){return d[3][1] }})
+		.attr('r',r)
 		.on("mouseover", tipMouseover)
 		.on("mouseout", tipMouseout)
 

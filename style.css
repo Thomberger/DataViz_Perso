@@ -40,7 +40,7 @@ body {
 	align-content: center;
 
 	/* background behind the plot */
-	background: #fefeef;
+	background: #111111;
 
 	/* default text */
 	font-family: sans-serif;
@@ -61,37 +61,45 @@ body {
 }
 
 .axis--grid .domain {
-	fill: #eeeeee;
+	fill: #333333;
 	stroke: none;
 }
 
 .axis--x .domain,
+.axis--x .tick line,
 .axis--grid .tick line {
-	stroke: #fafafa;
+	stroke: #999999;
+}
+
+.axis--x .tick text {
+	color: #999999;
+	font-weight: bold;
 }
 
 .axis--grid .tick--minor line {
 	stroke-opacity: 1;
 }
 
+
 .graticule {
 	fill: none;
 	stroke: #000;
 	stroke-width: .5px;
-	stroke-opacity: .5;
+	stroke-opacity: 0;
 }
 .sphere {
-	fill: #EEFAFC;
+	fill: url(#linear);
 	fill-opacity: 1;
 	stroke: #000;
 	stroke-width: 1px;
 	stroke-opacity: .5;
 }
 .country {
-	fill: #fafafa;
+	fill: #777777;
 	fill-opacity: 1;
-	stroke: #888;
+	stroke: #999999;
 	stroke-width: 1px;
+	vector-effect: non-scaling-stroke;
 }
 .tooltip {
 		position: absolute;
@@ -99,5 +107,11 @@ body {
 		width:  auto;
 		height: auto;
 		pointer-events: none;
-		background-color: white;
+		background-color: #222222;
+}
+
+.circle-hover {
+		stroke: #000;
+		stroke-width: 2px;
+		vector-effect: non-scaling-stroke;
 }

@@ -7,7 +7,7 @@ After_data_folder = os.path.abspath(os.path.dirname(__file__))
 
 races_df = pd.read_csv(Before_data_folder + "races.csv")
 circuits_df = pd.read_csv(Before_data_folder + "circuits.csv")
-Full_df = races_df.merge(circuits_df,on='circuitId',suffixes=['_x',''])[['raceId','year','name','location','country','lat', 'lng']]
+Full_df = races_df.merge(circuits_df,on='circuitId',suffixes=['_x',''])[['circuitId','year','name','lat', 'lng']]
 Full_df['TOT'] = np.ones((Full_df.shape[0],1))
 
 
