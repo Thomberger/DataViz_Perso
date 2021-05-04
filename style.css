@@ -77,13 +77,16 @@ span {
 
 }
 .timeline{
-	margin: auto;
+	position: fixed;
+  top: 0;
+	left: 50%;
+	margin-left: -45%;
 	width: 90%;
 }
 
 .map {
   margin: auto;
-	width: 60%;
+	width: 90%;
 }
 .plot_circuit_selection {
   margin: auto;

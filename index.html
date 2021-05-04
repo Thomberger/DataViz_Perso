@@ -11,7 +11,12 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>Formula 1 Boss</title>
+	<title>Formula 1 Viz</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicons/favicon.ico"/>
+ <link rel="icon" sizes="192x192" href="/favicons/icon192x192.png"/>
+ <link rel="icon" sizes="128x128" href="/favicons/icon128x128.png"/>
+	 <link rel="icon" sizes="32x32" href="/favicons/favicon-32x32.png"/>
+	 <link rel="icon" sizes="16x16" href="/favicons/favicon-16x16.png"/>
 	<meta name="author" content="Thomas Berger, Pierre Bouquet, Eliot Walt">
 
 	<link rel="stylesheet" href="style.css">
@@ -28,22 +33,30 @@
 				</defs>
 			</svg>
 		</div>
+		<!-- SPACER -->
+		<div class="plot_pilot">
+			<svg viewBox="0 0 1000 60" width="100%" >
+		</div>
 		<div class="map" id="map-container">
 			<svg id="map"  viewBox="0 0 1000 550" width="100%">
 			</svg>
 		</div>
+		<!-- SPACER -->
 		<div class="plot_circuit_selection" id="plot_circuit_selection">
 			<div class="container">
 				<div class="Header">
 				  <h1 id="Circuit"></h1>
 				  <h3 id="Circuit_stat"></h3>
-					<svg id="plot__circuit"  viewBox="0 0 1000 200" width="100%" >
+					<svg id="plot__circuit"  viewBox="0 0 1000 400" width="100%" >
 					</svg>
 				</div>
 				<div class="circuitdiv">
 					<img id="circuitsvg" class="circuitsvg" src="./Circuit-svg/No-data.jpg">
 				</div>
 
+			</div>
+			<div class="plot_pilot">
+				<svg viewBox="0 0 1000 800" width="100%" >
 			</div>
 
 
