@@ -340,7 +340,7 @@ function UpdatePlot(name,besttime,data){
 data = filteredData
 	if (data.length==0){
 
-		h1.innerHTML = "No lap time data for selected circuit."
+		h1.innerHTML = "No lap time data for selected circuit.<br>Lap time were recorded starting from 1996."
 		h2.innerHTML = ""
 		img.src = 'Circuit-svg/No-data.jpg';
 		Plotsvg.selectAll("g,path").remove()
@@ -348,7 +348,7 @@ data = filteredData
 	else{
 
 	 	h1.innerHTML = name + "  -  " + data[0][0] + "-" + data[data.length-1][0]
-		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1])+"   - By: "+besttime[2]+"    - In: "+besttime[0]
+		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"   - By: "+besttime[2]+"    - In: "+besttime[0]
 		img.src = 'Circuit-svg/'+name+'.svg';
 
 		Plotx.domain(d3.extent(data, function(d) {return d[0];}))
@@ -364,7 +364,7 @@ data = filteredData
 
     g_plot.append("g")
 		.attr("transform", "translate(" + Plotmargin.left + ",0)")
-     .call(d3.axisLeft(Ploty).ticks(20).tickFormat(function(d,i){return i % 2 === 1 ?  millisToMinutesAndSeconds(d) : null}));
+     .call(d3.axisLeft(Ploty).ticks(20).tickFormat(function(d,i){return i % 2 === 1 ?  millisToMinutesAndSeconds(d,1): null}));
 
 		 var Tooltip = d3.select("#circuitdiv")
       .append("div")
@@ -373,8 +373,8 @@ data = filteredData
 
       // Three function that change the tooltip when user hover / move / leave a cell
       var mouseover = function(d) {
-				var html  = "<span  style='font-weight:bold;color:#999999'> " + d[2] + " </span><br/>" +
-				"<span  style='font-weight:bold;color:#D20000'> " +  millisToMinutesAndSeconds(d[1]) +" </span>";
+				var html  = "<span  style='font-weight:bold;color:#999999'> " +d[0]+" - "+ d[2] + " </span><br/>" +
+				"<span  style='font-weight:bold;color:#D20000'> " +  millisToMinutesAndSeconds(d[1],0) +" </span>";
 
 				tooltip.html(html)
 				.style("left", (d3.event.pageX + 15) + "px")
@@ -416,9 +416,20 @@ data = filteredData
 	}
 }
 
-function millisToMinutesAndSeconds(millis) {
+function millisToMinutesAndSeconds(millis,short) {
   var minutes = Math.floor(millis / 60000);
   var seconds = Math.floor((millis-minutes*60000)/1000);
 	var millis = millis-minutes*60000-seconds*1000
-  return minutes.toString() + "min " + (seconds < 10 ? '0' : '') + seconds.toString() + "secs " + millis.toString()+ "ms";
+	var string = ""
+	if (minutes>=1){
+		string += minutes.toString() + "min "
+	}
+	if (seconds<10){
+		string += "0"
+	}
+	string += seconds.toString() + "secs "
+	if (short==0){
+		string+= millis.toString()+ "ms"
+	}
+  return string;
 }
