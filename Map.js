@@ -26,9 +26,9 @@ bigr = init_bigr
 init_stroke = 2
 stroke = init_stroke
 
-var Brushmargin = {top: 10, right: 10, bottom: 40, left: 10}
+var Brushmargin = {top: 5, right: 10, bottom: 20, left: 10}
 var Brushwidth = 1000 - Brushmargin.left - Brushmargin.right;
-var Brushheight = 100 - Brushmargin.top - Brushmargin.bottom;
+var Brushheight = 50 - Brushmargin.top - Brushmargin.bottom;
 
 //////////////////////////////////////
 // Map
@@ -134,7 +134,7 @@ svg.append("g")
 
 function brushend(){
 	if (!d3.event.sourceEvent) return; // Only transition after input.
-	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);return;}; // empty selections = select all.
+	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(plot_name,plot_besttime,plot_data);return;}; // empty selections = select all.
 	var d0 = d3.event.selection.map(x.invert),
 	d1 = d0.map(d3.timeYear.round);
 	// If empty when rounded, use floor & ceil instead.
@@ -162,10 +162,19 @@ function brush() {
 	maxYear = d3.timeFormat("%Y")(d1[1])
 	updateData(minYear,maxYear)
 
+	UpdatePlot(plot_name,plot_besttime,plot_data)
+
+
 }
 
 //////////////////////////////////////
 // circuit selection
+
+
+plot_data=0
+plot_name=0
+plot_besttime = 0
+
 var Plotmargin = {
 	top: 20,
 	right: 20,
@@ -178,10 +187,12 @@ Plotheight = 200 - Plotmargin.top - Plotmargin.bottom;
 const Plotsvg = d3.select("#plot__circuit")
 var Plotx = d3.scaleLinear().range([Plotmargin.left, Plotwidth]);
 var Ploty = d3.scaleLinear().range([Plotheight, Plotmargin.top	]);
+var circle_selected = 0
 
 
 function circle_select(d) {
-	console.log(minYear,maxYear)
+
+	circle_selected = d
 	g.selectAll(".circle-clicked").classed("circle-clicked", false);
 
 	this.setAttribute("class", "circle-clicked"); // add hover class to emphasize
@@ -192,14 +203,15 @@ function circle_select(d) {
 		data.forEach(function(v){
 			if(d[0]==v.key){
 				v.values.forEach(function (t){
-					if (t.year>=minYear & t.year<maxYear){
-						//console.log(t)
 						filteredData.push([t.year,t.milliseconds,t.forename + " " + t.surname])
 						if(t.milliseconds<=besttime[1]){
 							besttime=[t.year,t.milliseconds,t.forename + " " + t.surname]
 						}
-					}}
+					}
 				)}})
+				plot_data=filteredData
+				plot_name=name
+				plot_besttime = besttime
 				UpdatePlot(name,besttime,filteredData)
 			})
 		}
@@ -213,7 +225,6 @@ var tooltip = d3.select("#map-container").append("div")
 
 // tooltip mouseover event handler
 function tipMouseover(d) {
-	console.log(d)
 	this.setAttribute("class", "circle-hover"); // add hover class to emphasize
 	this.setAttribute("r",bigr)
 
@@ -317,19 +328,29 @@ function getCol(matrix, col){
 
 
 function UpdatePlot(name,besttime,data){
+
 	var h1 = document.getElementById("Circuit");
 	var h2 = document.getElementById("Circuit_stat");
 	var img = document.getElementById("circuitsvg");
+	filteredData = []
+	data.forEach(function (d) {
 
+		if (d[0]>=minYear & d[0]<maxYear){
+			filteredData.push(d)
+		}
+	})
+
+data = filteredData
 	if (data.length==0){
+
 		h1.innerHTML = "No lap time data for selected circuit."
 		h2.innerHTML = ""
 		img.src = 'Circuit-svg/No-data.jpg';
 		Plotsvg.selectAll("g").remove()
 	}
 	else{
+
 	 	h1.innerHTML = name + "  -  " + data[0][0] + "-" + data[data.length-1][0]
-		console.log(besttime,data)
 		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1])+"   - By: "+besttime[2]+"    - In: "+besttime[0]
 		img.src = 'Circuit-svg/'+name+'.svg';
 
@@ -365,17 +386,17 @@ function UpdatePlot(name,besttime,data){
         .attr("r", 5)
 				.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
         .style("fill", "#CC0000");
-
+/*
 		Plotsvg.append("path")
-      .data(dataset1)
+      .data(data)
 			.attr("fill", "none")
       .attr("stroke", "#69b3a2")
       .attr("stroke-width",10)
       .attr("d",d3.line()
-        .x(function (d) { console.log( xScale(d[0]));return xScale(d[0]); })
-        .y(function (d) { return yScale(d[1]); }))
+        .x(function (d) { console.log( Plotx(d[0]));return Plotx(d[0]); })
+        .y(function (d) { return Ploty(d[1]); }))
 
-
+*/
 
 
 /*
