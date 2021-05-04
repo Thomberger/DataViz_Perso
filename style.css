@@ -46,6 +46,25 @@ body {
 	font-family: sans-serif;
 	font-size: 1.1rem;
 }
+
+span {
+  white-space:pre;
+}
+.full-width {
+
+}
+.Header {
+	color: #999999;
+	flex:4;
+}
+.circuitsvg{
+	 flex:1;
+	 height:auto;
+}
+.container {
+  display: flex;
+
+}
 .timeline{
 	margin: auto;
 	width: 90%;
@@ -54,6 +73,10 @@ body {
 .map {
   margin: auto;
 	width: 80%;
+}
+.plot_circuit_selection {
+  margin: auto;
+	width: 100%;
 }
 
 .area {
@@ -108,10 +131,31 @@ body {
 		height: auto;
 		pointer-events: none;
 		background-color: #222222;
+		border-radius: 4px;
 }
 
 .circle-hover {
 		stroke: #000;
 		stroke-width: 2px;
 		vector-effect: non-scaling-stroke;
+}
+
+.circle-clicked {
+		fill:#ffffff;
+		stroke: #000;
+		stroke-width: 2px;
+		vector-effect: non-scaling-stroke;
+}
+
+.plotline{
+	fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.plotaxis path,
+.plotaxis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }

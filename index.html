@@ -17,37 +17,37 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div >
+	<div width="100%">
 		<div class="timeline">
-
 			<svg id="timescale"  viewBox="0 0 1000 100" width="100%">
 				<defs>
-
-	<linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="100%">
-
-		<stop offset="0%"   stop-color="#111"/>
-
-		<stop offset="100%" stop-color="#333"/>
-
-	</linearGradient>
-
-</defs>
-
-
+					<linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="100%">
+						<stop offset="0%"   stop-color="#111"/>
+						<stop offset="100%" stop-color="#333"/>
+					</linearGradient>
+				</defs>
 			</svg>
 		</div>
 		<div class="map" id="map-container">
-
-			<svg id="map"  viewBox="0 0 1000 1000" width="100%">
-				<style>
-
-
-
-
-				</style>
-
-
+			<svg id="map"  viewBox="0 0 1000 550" width="100%">
 			</svg>
+		</div>
+		<div class="plot_circuit_selection" id="plot_circuit_selection">
+			<div class="container">
+				<div class="Header">
+				  <h1 id="Circuit"></h1>
+				  <h3 id="Circuit_stat"></h3>
+					<svg id="plot__circuit"  viewBox="0 0 1000 200" width="100%" >
+					</svg>
+				</div>
+				<div>
+					<img id="circuitsvg" src="./Circuit-svg/No-data.jpg">
+				</div>
+
+			</div>
+
+
+
 		</div>
 	</div>
 
