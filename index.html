@@ -22,9 +22,9 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div width="100%">
-		<div class="timeline">
-			<svg id="timescale"  viewBox="0 0 1000 60" width="100%">
+	<div width="100vw" class="containerBig">
+		<div class="timeline" style="grid-area:1/2/2/4">
+			<svg id="timescale"  viewBox="0 0 1000 60" width="95%" height="100%" style="display: block;margin: auto">
 				<defs>
 					<linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="100%">
 						<stop offset="0%"   stop-color="#111"/>
@@ -33,31 +33,22 @@
 				</defs>
 			</svg>
 		</div>
-		<!-- SPACER -->
-		<div class="plot_pilot">
-			<svg viewBox="0 0 1000 60" width="100%" >
-		</div>
-		<div class="map" id="map-container">
-			<svg id="map"  viewBox="0 0 1000 550" width="100%">
+		<div class="map" id="map-container" style="grid-area:2/2/3/4;border:solid yellow 1px;display: block;margin: auto">
+			<svg id="map"  viewBox="0 0 1000 500" width="100%" height="auto">
 			</svg>
 		</div>
-		<!-- SPACER -->
-		<div class="plot_circuit_selection" id="plot_circuit_selection">
-			<div class="container">
-				<div class="Header">
-				  <h1 id="Circuit"></h1>
-				  <h3 id="Circuit_stat"></h3>
-					<svg id="plot__circuit"  viewBox="0 0 1000 400" width="100%" >
-					</svg>
-				</div>
-				<div class="circuitdiv">
-					<img id="circuitsvg" class="circuitsvg" src="./Circuit-svg/No-data.jpg">
-				</div>
-
-			</div>
-			<div class="plot_pilot">
-				<svg viewBox="0 0 1000 800" width="100%" >
-			</div>
+		<div class="Header"  style="grid-area:3/2/4/3;border:solid yellow 1px">
+		  <h1 id="Circuit"></h1>
+		  <h3 id="Circuit_stat"></h3>
+			<svg id="plot__circuit"  viewBox="0 0 1000 400" width="100%" height="auto">
+			</svg>
+		</div>
+		<div class="circuitdiv" style="grid-area:3/3/4/4;border:solid yellow 1px;margin: auto">
+			<img id="circuitsvg" class="circuitsvg" src="./Circuit-svg/No-data.jpg"  width="100%" height="auto">
+		</div>
+		<div class="plot_pilot" style="grid-area:4/2/5/4;border:solid yellow 1px">
+			<svg viewBox="0 0 1000 800" width="100%" >
+		</div>
 
 
 

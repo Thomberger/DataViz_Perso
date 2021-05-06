@@ -1,10 +1,13 @@
 //////////////////////////////////////
 // Parameters
 
-projection = d3.geoRobinson().precision(.1);
-	//geoInterruptedMollweideHemispheres
+projection = d3.geoWinkel3().precision(.1);
+  //geoRobinson
+	//geoInterruptedMollweideHemispheres().rotate([30,0])
 	//geoMercator
 	//geoOrthographic
+	//geoWinkel3
+
 
 const Mapwidth = 1000; // change in css
 const Mapheight = 1000;
@@ -173,6 +176,8 @@ function brush() {
 // External value for brushing update
 plot_id=0
 plot_name=0
+plot_besttime=0
+plot_data =0
 
 var Plotmargin = {
 	top: 20,
@@ -209,6 +214,7 @@ function UpdatePlotdata(id,name){
 				)}})
 				plot_id=id
 				plot_name=name
+				plot_besttime = besttime
 				UpdatePlot(name,besttime,filteredData)
 			})
 		}
@@ -325,7 +331,7 @@ function getCol(matrix, col){
 
 
 function UpdatePlot(name,besttime,data){
-
+console.log(minYear,maxYear)
 	var h1 = document.getElementById("Circuit");
 	var h2 = document.getElementById("Circuit_stat");
 	var img = document.getElementById("circuitsvg");

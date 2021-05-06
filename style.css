@@ -50,6 +50,17 @@ body {
 span {
   white-space:pre;
 }
+
+
+.containerBig{
+	display: grid;
+	grid-template-columns: 5vw 60vw 30vw 5vw;
+  grid-template-rows: 10vh 90vh 80vh 50vh;
+}
+
+
+
+
 .full-width {
 
 }
@@ -65,23 +76,11 @@ span {
 	grid-row:1;
 	/*border: solid yellow 1px;*/
 }
-.circuitsvg{
-	width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.container {
+.containersmall {
 	display: grid;
 	grid-template-columns: 60% 2% 35%;
   grid-template-rows: auto;
 
-}
-.timeline{
-	position: fixed;
-  top: 0;
-	left: 50%;
-	margin-left: -45%;
-	width: 90%;
 }
 
 .map {
