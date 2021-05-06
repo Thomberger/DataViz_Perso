@@ -138,7 +138,7 @@ svg.append("g")
 
 function brushend(){
 	if (!d3.event.sourceEvent) return; // Only transition after input.
-	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(plot_name,plot_besttime,plot_data);return;}; // empty selections = select all.
+	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(plot_id,plot_name);return;}; // empty selections = select all.
 	var d0 = d3.event.selection.map(x.invert),
 	d1 = d0.map(d3.timeYear.round);
 	// If empty when rounded, use floor & ceil instead.
@@ -165,7 +165,7 @@ function brush() {
 	minYear = d3.timeFormat("%Y")(d1[0])
 	maxYear = d3.timeFormat("%Y")(d1[1])
 	updateData(minYear,maxYear)
-	UpdatePlotdata(plot_id,plot_name)
+	UpdatePlot(plot_id,plot_name)
 
 
 }
@@ -176,8 +176,6 @@ function brush() {
 // External value for brushing update
 plot_id=0
 plot_name=0
-plot_besttime=0
-plot_data =0
 
 var Plotmargin = {
 	top: 20,
@@ -196,28 +194,11 @@ function circle_select(d) {
 	g.selectAll(".circle-clicked").classed("circle-clicked", false);
 
 	this.setAttribute("class", "circle-clicked"); // add hover class to emphasize
-	UpdatePlotdata(d[0],d[3])
+	plot_id = d[0]
+	plot_name=d[3]
+	UpdatePlot(plot_id,plot_name)
 
 }
-function UpdatePlotdata(id,name){
-	races.then(function(data){
-		filteredData = []
-		besttime = [-1,Infinity,"No name"]
-		data.forEach(function(v){
-			if(id==v.key){
-				v.values.forEach(function (t){
-						filteredData.push([t.year,t.milliseconds,t.forename + " " + t.surname])
-						if(t.milliseconds<=besttime[1] & t.year>=minYear & t.year<maxYear ){
-							besttime=[t.year,t.milliseconds,t.forename + " " + t.surname]
-						}
-					}
-				)}})
-				plot_id=id
-				plot_name=name
-				plot_besttime = besttime
-				UpdatePlot(name,besttime,filteredData)
-			})
-		}
 
 //////////////////////////////////////
 // Tool tip
@@ -330,20 +311,29 @@ function getCol(matrix, col){
 }
 
 
-function UpdatePlot(name,besttime,data){
-console.log(minYear,maxYear)
+function UpdatePlot(id,name){
+console.log(id,minYear,maxYear)
 	var h1 = document.getElementById("Circuit");
 	var h2 = document.getElementById("Circuit_stat");
 	var img = document.getElementById("circuitsvg");
-	filteredData = []
-	data.forEach(function (d) {
 
-		if (d[0]>=minYear & d[0]<maxYear){
-			filteredData.push(d)
-		}
-	})
+	races.then(function(data){
+		besttime = [-1,Infinity,"No name"]
+		filteredData=[]
+		data.forEach(function(v){
+			if(id==v.key){
+				v.values.forEach(function (t){
+						if (t.year>=minYear & t.year<maxYear){
+							filteredData.push([t.year,t.milliseconds,t.forename + " " + t.surname])
 
-data = filteredData
+							if(t.milliseconds<=besttime[1]){
+								besttime=[t.year,t.milliseconds,t.forename + " " + t.surname]
+						}
+					}}
+				)}})
+			data = filteredData
+			console.log(filteredData,data)
+
 	if (data.length==0){
 
 		h1.innerHTML = "No lap time data for selected circuit.<br>Lap time were recorded starting from 1996."
@@ -354,7 +344,7 @@ data = filteredData
 	else{
 
 	 	h1.innerHTML = name + "  -  " + data[0][0] + "-" + data[data.length-1][0]
-		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"   - By: "+besttime[2]+"    - In: "+besttime[0]
+		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"<br>By: "+besttime[2]+"    - In: "+besttime[0]
 		img.src = 'Circuit-svg/'+name+'.svg';
 
 		Plotx.domain(d3.extent(data, function(d) {return d[0];}))
@@ -370,7 +360,7 @@ data = filteredData
 
     g_plot.append("g")
 		.attr("transform", "translate(" + Plotmargin.left + ",0)")
-     .call(d3.axisLeft(Ploty).ticks(20).tickFormat(function(d,i){return i % 2 === 1 ?  millisToMinutesAndSeconds(d,1): null}));
+     .call(d3.axisLeft(Ploty).ticks(20).tickFormat(function(d,i){return i % 2 === 0 ?  millisToMinutesAndSeconds(d,1): null}));
 
 		 var Tooltip = d3.select("#circuitdiv")
       .append("div")
@@ -420,6 +410,7 @@ data = filteredData
 			.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
       .attr("d",pathData)
 	}
+	})
 }
 
 function millisToMinutesAndSeconds(millis,short) {

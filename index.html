@@ -22,8 +22,9 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
+	
 	<div width="100vw" class="containerBig">
-		<div class="timeline" style="grid-area:1/2/2/4">
+		<div class="timeline" style="position:sticky;top: 0;grid-area:1/2/2/4">
 			<svg id="timescale"  viewBox="0 0 1000 60" width="95%" height="100%" style="display: block;margin: auto">
 				<defs>
 					<linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -33,25 +34,21 @@
 				</defs>
 			</svg>
 		</div>
-		<div class="map" id="map-container" style="grid-area:2/2/3/4;border:solid yellow 1px;display: block;margin: auto">
+		<div class="map" id="map-container" style="grid-area:2/2/3/4;display: block;margin: auto">
 			<svg id="map"  viewBox="0 0 1000 500" width="100%" height="auto">
 			</svg>
 		</div>
-		<div class="Header"  style="grid-area:3/2/4/3;border:solid yellow 1px">
+		<div class="Header"  style="grid-area:3/2/4/3;">
 		  <h1 id="Circuit"></h1>
 		  <h3 id="Circuit_stat"></h3>
 			<svg id="plot__circuit"  viewBox="0 0 1000 400" width="100%" height="auto">
 			</svg>
 		</div>
-		<div class="circuitdiv" style="grid-area:3/3/4/4;border:solid yellow 1px;margin: auto">
+		<div class="circuitdiv" style="grid-area:3/3/4/4;;margin: auto">
 			<img id="circuitsvg" class="circuitsvg" src="./Circuit-svg/No-data.jpg"  width="100%" height="auto">
 		</div>
-		<div class="plot_pilot" style="grid-area:4/2/5/4;border:solid yellow 1px">
+		<div class="plot_pilot" style="grid-area:4/2/5/4;">
 			<svg viewBox="0 0 1000 800" width="100%" >
-		</div>
-
-
-
 		</div>
 	</div>
 
