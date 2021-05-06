@@ -1,16 +1,9 @@
 //////////////////////////////////////
 // Parameters
 
-projection = d3.geoWinkel3().precision(.1);
-  //geoRobinson
-	//geoInterruptedMollweideHemispheres().rotate([30,0])
-	//geoMercator
-	//geoOrthographic
-	//geoWinkel3
-
 
 const Mapwidth = 1000; // change in css
-const Mapheight = 1000;
+const Mapheight = 500;
 
 var minYear = "1950"
 var maxYear = "2021"
@@ -20,6 +13,14 @@ init_bigr = 5
 bigr = init_bigr
 init_stroke = 2
 stroke = init_stroke
+
+projection = d3.geoRobinson().precision(0.01).scale(150).translate([Mapwidth / 2, Mapheight / 2]);
+
+  //geoRobinson
+	//geoInterruptedMollweideHemispheres().rotate([30,0])
+	//geoMercator
+	//geoOrthographic
+	//geoWinkel3
 
 var Brushmargin = {top: 5, right: 10, bottom: 20, left: 10}
 var Brushwidth = 1000 - Brushmargin.left - Brushmargin.right;
@@ -40,11 +41,6 @@ g.append("path")
 .attr('class', 'sphere')
 .attr("d", path);
 
-g.append("clipPath")
-.attr("id", "clip")
-.append("use")
-.attr("xlink:href", "#sphere");
-
 const locations = d3.csv('Data_processed/races.csv').then(function(data){return d3.nest()
 	.key(function(d) { return [d.circuitId, d.name,d.lat,d.lng,d.location,d.country]; })
 	.entries(data);});
@@ -55,38 +51,54 @@ const races = d3.csv('Data_processed/laps.csv').then(function(data){return d3.ne
 	.entries(data);});
 
 
-const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed)
-Mapsvg.call(zoom).on("dblclick.zoom",reset_zoom)
-
-
-function reset_zoom(){
-	d3.event.transform = d3.zoomIdentity
-	zoomed()
-}
-
-function zoomed(){
-
-	g.selectAll('.country') // To prevent stroke width from scaling
-	.attr('transform', d3.event.transform);
-	g.selectAll('.sphere') // To prevent stroke width from scaling
-	.attr('transform', d3.event.transform);
-	//g.selectAll('path') // To prevent stroke width from scaling
-	//.attr('transform', d3.event.transform);
-
-	r = init_r/d3.event.transform.k
-	bigr = init_bigr/d3.event.transform.k
-	stroke = init_stroke/d3.event.transform.k
-
-	g.selectAll('circle')
-	.attr('r',r)
-	.attr('transform', d3.event.transform)
-	brushend()
-}
-
-
 drawGraticule();
 drawGlobe();
+
+g.append("g")
+.attr("class", "brush")
+.call(d3.brush()
+.extent([[0, 0], [Mapwidth, Mapheight]])
+.on("end",brushMap))
+
+
 updateData(1950,2020)
+
+
+function brushMap(){
+	console.log(d3.event.selection)
+	d = d3.event.selection
+	if (!d) {
+		scale =1
+		g.transition()
+      .duration(750)
+			.attr("transform", "translate(" + [0,0] + ")scale(" + scale + ")");
+	}
+	else{
+			dx = d[1][0] - d[0][0],
+      dy = d[1][1] - d[0][1],
+      xmap = (d[0][0] + d[1][0]) / 2,
+      ymap = (d[0][1] + d[1][1]) / 2,
+      scale = 1 / Math.max(dx / Mapwidth, dy / Mapheight),
+      translate = [Mapwidth / 2 - scale * xmap, Mapheight / 2 - scale * ymap];
+
+		g.transition()
+      .duration(750)
+			.attr("transform", "translate(" + translate + ")scale(" + scale + ")")
+		Mapsvg.select(".brush").call(d3.brush().clear)
+	}
+	r = init_r/Math.pow(scale,3/4)
+	bigr = init_bigr/Math.pow(scale,3/4)
+	stroke = init_stroke/scale
+
+	g.selectAll('circle')
+				.transition()
+	      .duration(750)
+				.attr('r',r)
+
+}
+
+
+
 
 
 //////////////////////////////////////
@@ -191,9 +203,10 @@ var Plotx = d3.scaleLinear().range([Plotmargin.left, Plotwidth]);
 var Ploty = d3.scaleLinear().range([Plotheight, Plotmargin.top	]);
 
 function circle_select(d) {
-	g.selectAll(".circle-clicked").classed("circle-clicked", false);
+	g.selectAll("circle")
+	.attr("fill","#D20000")
 
-	this.setAttribute("class", "circle-clicked"); // add hover class to emphasize
+	this.setAttribute("fill", "#fff"); // add hover class to emphasize
 	plot_id = d[0]
 	plot_name=d[3]
 	UpdatePlot(plot_id,plot_name)
@@ -241,10 +254,10 @@ function drawGlobe() {
 	d3.json('//unpkg.com/world-atlas@1/world/110m.json').then(function(worldData) {
 		g.selectAll(".segment")
 		.data(topojson.feature(worldData, worldData.objects.countries).features)
-		.enter().insert("path", "circle")
+		.enter().insert("path", "g")
 		.attr("class", "country")
 		.attr("clip-path", "url(#clip)")
-		.attr("d", path);
+		.attr("d", path)
 	})
 }
 
@@ -312,7 +325,6 @@ function getCol(matrix, col){
 
 
 function UpdatePlot(id,name){
-console.log(id,minYear,maxYear)
 	var h1 = document.getElementById("Circuit");
 	var h2 = document.getElementById("Circuit_stat");
 	var img = document.getElementById("circuitsvg");
@@ -332,7 +344,7 @@ console.log(id,minYear,maxYear)
 					}}
 				)}})
 			data = filteredData
-			console.log(filteredData,data)
+
 
 	if (data.length==0){
 

@@ -55,7 +55,7 @@ span {
 .containerBig{
 	display: grid;
 	grid-template-columns: 5vw 60vw 30vw 5vw;
-  grid-template-rows: 10vh 90vh 80vh 50vh;
+  grid-template-rows: 8vh 90vh 80vh 50vh;
 }
 
 
@@ -170,5 +170,4 @@ span {
 .plotaxis line {
   fill: none;
   stroke: #000;
-  shape-rendering: crispEdges;
 }
