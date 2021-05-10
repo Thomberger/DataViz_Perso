@@ -3,7 +3,7 @@
 
 
 const Mapwidth = 1000; // change in css
-const Mapheight = 500;
+const Mapheight = 600;
 
 var minYear = "1950"
 var maxYear = "2021"
@@ -14,7 +14,7 @@ bigr = init_bigr
 init_stroke = 2
 stroke = init_stroke
 
-projection = d3.geoRobinson().precision(0.01).scale(150).translate([Mapwidth / 2, Mapheight / 2]);
+projection = d3.geoWinkel3().precision(0.01).scale(195).translate([Mapwidth / 2, Mapheight / 2]);
 
   //geoRobinson
 	//geoInterruptedMollweideHemispheres().rotate([30,0])
@@ -63,9 +63,16 @@ g.append("g")
 
 updateData(1950,2020)
 
+const Dstanding = d3.csv('Data_processed/Driver_standings.csv').then(function(data){return d3.nest()
+	.key(function(d) { return d.year; })
+	.entries(data);});
+
+
+updateTable()
+
+
 
 function brushMap(){
-	console.log(d3.event.selection)
 	d = d3.event.selection
 	if (!d) {
 		scale =1
@@ -150,7 +157,7 @@ svg.append("g")
 
 function brushend(){
 	if (!d3.event.sourceEvent) return; // Only transition after input.
-	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(plot_id,plot_name);return;}; // empty selections = select all.
+	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(plot_id,plot_name);updateTable();return;}; // empty selections = select all.
 	var d0 = d3.event.selection.map(x.invert),
 	d1 = d0.map(d3.timeYear.round);
 	// If empty when rounded, use floor & ceil instead.
@@ -178,6 +185,7 @@ function brush() {
 	maxYear = d3.timeFormat("%Y")(d1[1])
 	updateData(minYear,maxYear)
 	UpdatePlot(plot_id,plot_name)
+	updateTable()
 
 
 }
@@ -190,10 +198,10 @@ plot_id=0
 plot_name=0
 
 var Plotmargin = {
-	top: 20,
+	top: 0,
 	right: 20,
 	bottom: 30,
-	left: 60
+	left: 40
 }
 Plotwidth = 1000 - Plotmargin.left - Plotmargin.right;
 Plotheight = 400 - Plotmargin.top - Plotmargin.bottom;
@@ -325,12 +333,13 @@ function getCol(matrix, col){
 
 
 function UpdatePlot(id,name){
+	if (plot_id != 0) {
 	var h1 = document.getElementById("Circuit");
 	var h2 = document.getElementById("Circuit_stat");
 	var img = document.getElementById("circuitsvg");
 
 	races.then(function(data){
-		besttime = [-1,Infinity,"No name"]
+		besttime = [-1,999999,"No name"]
 		filteredData=[]
 		data.forEach(function(v){
 			if(id==v.key){
@@ -338,17 +347,16 @@ function UpdatePlot(id,name){
 						if (t.year>=minYear & t.year<maxYear){
 							filteredData.push([t.year,t.milliseconds,t.forename + " " + t.surname])
 
-							if(t.milliseconds<=besttime[1]){
+							if(parseInt(t.milliseconds) <= parseInt(besttime[1])){
 								besttime=[t.year,t.milliseconds,t.forename + " " + t.surname]
+
 						}
 					}}
 				)}})
 			data = filteredData
-
-
 	if (data.length==0){
 
-		h1.innerHTML = "No lap time data for selected circuit.<br>Lap time were recorded starting from 1996."
+		h1.innerHTML = "No lap time data for selected circuit and time-range.<br>Lap time were recorded starting from 1996."
 		h2.innerHTML = ""
 		img.src = 'Circuit-svg/No-data.jpg';
 		Plotsvg.selectAll("g,path").remove()
@@ -360,7 +368,7 @@ function UpdatePlot(id,name){
 		img.src = 'Circuit-svg/'+name+'.svg';
 
 		Plotx.domain(d3.extent(data, function(d) {return d[0];}))
-		Ploty.domain([0,d3.extent(data, function(d) {return d[1];})[1]*1.1])
+		Ploty.domain([d3.extent(data, function(d) {return d[1];})[0]*0.8,d3.extent(data, function(d) {return d[1];})[1]*1.1])
 
 		Plotsvg.selectAll("g,path").remove()
 		g_plot = Plotsvg.append("g")
@@ -423,7 +431,7 @@ function UpdatePlot(id,name){
       .attr("d",pathData)
 	}
 	})
-}
+}}
 
 function millisToMinutesAndSeconds(millis,short) {
   var minutes = Math.floor(millis / 60000);
@@ -441,4 +449,58 @@ function millisToMinutesAndSeconds(millis,short) {
 		string+= millis.toString()+ "ms"
 	}
   return string;
+}
+
+
+function tabulate(data,columns,iddiv) {
+	d3.select('table').remove()
+  var table = d3.select(iddiv).append('table').attr("align","center")
+	var thead = table.append('thead')
+	var tbody = table.append('tbody')
+
+	thead.append('tr')
+	  .selectAll('th')
+	    .data(columns)
+	    .enter()
+	  .append('th')
+	    .text(function (d) { return d })
+
+	const rows = tbody.selectAll('tr')
+							.data(data, function(d,i){   // don't need the first row
+								return d;
+							}).enter().append("tr")
+							/*
+	rows.exit().remove();
+	rows.enter().append("tr");*/
+
+	var cells = rows.selectAll('td')
+								.data(function(d) {return d; })
+								.enter()
+								.append("td")
+								.text(function(d) {return d;});
+
+
+}
+
+
+
+function updateTable(){
+	var h1 = document.getElementById("Driver_header");
+	h1.innerHTML = "Driver standings of season " + (maxYear-1)
+
+	Dstanding.then(function(data){
+		filteredData=[]
+		data.forEach(function(v){
+			if(maxYear-1==v.key){
+				v.values.forEach(function (t){
+						filteredData.push([t.forename + " " + t.surname,t.points,t.wins])
+					})
+				}})
+
+
+			data = filteredData
+			tabulate(data,["Driver","Points","Wins"],'#Driver_table')
+
+		})
+
 }

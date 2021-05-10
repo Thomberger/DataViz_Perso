@@ -19,7 +19,7 @@ to
 /*
 Make the document fill the whole viewport, this overrides any weird defaults that browsers might have.
 */
-html, body, figure {
+html, body, {
 	width: 100%;
 	padding: 0;
 	margin: 0;
@@ -29,22 +29,15 @@ html, body, figure {
 
 /* Default font and size */
 body {
-
-	width: 100vw;
-	height: 100vh;
-
-	/* center vertically */
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: center;
-	align-content: center;
-
 	/* background behind the plot */
 	background: #111111;
+	color: #999999;
 
 	/* default text */
 	font-family: sans-serif;
 	font-size: 1.1rem;
+
+
 }
 
 span {
@@ -54,46 +47,29 @@ span {
 
 .containerBig{
 	display: grid;
-	grid-template-columns: 5vw 60vw 30vw 5vw;
-  grid-template-rows: 8vh 90vh 80vh 50vh;
+	grid-template-columns: 15vw 40vw 30vw 15vw;
+  grid-template-rows: 8vh 84vh 15vh 45vh 50vh;
+	column-gap: 0px;
+  row-gap: 0px;
+	justify-content: stretch;
 }
 
+td {
+	font-size:0.7vw;
+}
+th {
+	font-size:0.8vw;
 
-
+}
 
 .full-width {
 
 }
 .Header {
-	color: #999999;
-	grid-column: 1/ span 1;
-	grid-row:1;
-	/*border: solid green 1px;*/
 
-}
-.circuitdiv{
-	grid-column: 3/ span 1;
-	grid-row:1;
-	/*border: solid yellow 1px;*/
-}
-.containersmall {
-	display: grid;
-	grid-template-columns: 60% 2% 35%;
-  grid-template-rows: auto;
+	font-size: 0.7vw;
+	/*border: solid green 1px;    2vh*/
 
-}
-
-.map {
-  margin: auto;
-	width: 90%;
-}
-.plot_circuit_selection {
-  margin: auto;
-	width: 100%;
-}
-
-.area {
-	fill: lightsteelblue;
 }
 
 .axis--grid .domain {
