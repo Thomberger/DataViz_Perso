@@ -156,6 +156,8 @@ svg.append("g")
 .on("end", brushend));
 
 function brushend(){
+	//ROUND TO YEAR AND UPDATE BRUSH SELECTION
+	//RESET BRUSH IF EMPTY
 	if (!d3.event.sourceEvent) return; // Only transition after input.
 	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(plot_id,plot_name);updateTable();return;}; // empty selections = select all.
 	var d0 = d3.event.selection.map(x.invert),
@@ -173,6 +175,7 @@ function brushend(){
 }
 
 function brush() {
+	//ROUND TO YEAR AND UPDATE ALL DATA
 	var d0 = d3.event.selection.map(x.invert),
 	d1 = d0.map(d3.timeYear.round);
 	// If empty when rounded, use floor & ceil instead.
@@ -211,6 +214,8 @@ var Plotx = d3.scaleLinear().range([Plotmargin.left, Plotwidth]);
 var Ploty = d3.scaleLinear().range([Plotheight, Plotmargin.top	]);
 
 function circle_select(d) {
+	// PROBLEM WITH SELECTION AND CHANGING DATA (TIMELINE BRUSH WILL CHANGE POSITION OF SELECTED CIRCUIT)
+	// TO AVOID THAT CREATE ARRAY OF SELECTED POINTS AND REMOVE IT FROM DATA POINTS, UPDATE BOTH DATA ?
 	g.selectAll("circle")
 	.attr("fill","#D20000")
 
@@ -228,7 +233,7 @@ var tooltip = d3.select("#map-container").append("div")
 .attr("class", "tooltip")
 .style("opacity", 0);
 
-// tooltip mouseover event handler
+
 function tipMouseover(d) {
 	this.setAttribute("class", "circle-hover"); // add hover class to emphasize
 	this.setAttribute("r",bigr)
@@ -245,7 +250,6 @@ function tipMouseover(d) {
 	.style("opacity", 0.9) // started as 0!
 };
 
-// tooltip mouseout event handler
 function tipMouseout(d) {
 	this.classList.remove("circle-hover"); // remove hover class
 	this.setAttribute("r",r)
@@ -254,7 +258,6 @@ function tipMouseout(d) {
 	.duration(500) // ms
 	.style("opacity", 0); // don't care about position!
 };
-
 
 function drawGlobe() {
 
@@ -331,7 +334,6 @@ function getCol(matrix, col){
 	return column;
 }
 
-
 function UpdatePlot(id,name){
 	if (plot_id != 0) {
 	var h1 = document.getElementById("Circuit");
@@ -345,7 +347,7 @@ function UpdatePlot(id,name){
 			if(id==v.key){
 				v.values.forEach(function (t){
 						if (t.year>=minYear & t.year<maxYear){
-							filteredData.push([t.year,t.milliseconds,t.forename + " " + t.surname])
+							filteredData.push([t.year,parseInt(t.milliseconds),t.forename + " " + t.surname])
 
 							if(parseInt(t.milliseconds) <= parseInt(besttime[1])){
 								besttime=[t.year,t.milliseconds,t.forename + " " + t.surname]
@@ -354,6 +356,7 @@ function UpdatePlot(id,name){
 					}}
 				)}})
 			data = filteredData
+
 	if (data.length==0){
 
 		h1.innerHTML = "No lap time data for selected circuit and time-range.<br>Lap time were recorded starting from 1996."
@@ -366,6 +369,7 @@ function UpdatePlot(id,name){
 	 	h1.innerHTML = name + "  -  " + data[0][0] + "-" + data[data.length-1][0]
 		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"<br>By: "+besttime[2]+"    - In: "+besttime[0]
 		img.src = 'Circuit-svg/'+name+'.svg';
+
 
 		Plotx.domain(d3.extent(data, function(d) {return d[0];}))
 		Ploty.domain([d3.extent(data, function(d) {return d[1];})[0]*0.8,d3.extent(data, function(d) {return d[1];})[1]*1.1])
@@ -451,7 +455,6 @@ function millisToMinutesAndSeconds(millis,short) {
   return string;
 }
 
-
 function tabulate(data,columns,iddiv) {
 	d3.select('table').remove()
   var table = d3.select(iddiv).append('table').attr("align","center")
@@ -481,8 +484,6 @@ function tabulate(data,columns,iddiv) {
 
 
 }
-
-
 
 function updateTable(){
 	var h1 = document.getElementById("Driver_header");
