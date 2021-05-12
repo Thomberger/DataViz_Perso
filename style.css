@@ -14,8 +14,8 @@
   --Background:   #eee;
   --Foreground:   #333;
   --Midtone: 		  #777;
-  --Accent: 		#0000D2;
-  --Secondary: 	#0000B3;
+  --Accent: 		#D20000;
+  --Secondary: 	#B30000;
 	--extreme1: 		#fff;
 	--shady1:				#ddd;
 	--shady2:				#ccc;
@@ -94,7 +94,7 @@ th {
 
 }
 .Header {
-	/*color: var(--Accent);*/
+	color: var(--Accent);
 	/*border: solid green 1px;    2vh*/
 
 }

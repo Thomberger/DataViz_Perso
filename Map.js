@@ -1,6 +1,6 @@
 //////////////////////////////////////
 // Parameters
-setTheme('theme-dark')
+setTheme('theme-light')
 
 const Mapwidth = 1000; // change in css
 const Mapheight = 600;
@@ -482,7 +482,7 @@ function tabulate(data,columns,iddiv) {
 								return d;
 							}).enter().append("tr")
 							.attr('class','first')
-							.attr('class',function(d,i) {if(i==0){return 'first'}else if(i==1){return 'second'}else{return ''}})
+							.attr('class',function(d,i) {if(i==0){return 'first'}else if(i==1|i==2){return 'second'}else{return ''}})
 							/*
 	rows.exit().remove();
 	rows.enter().append("tr");*/
