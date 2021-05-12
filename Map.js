@@ -520,21 +520,18 @@ function updateTable(){
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
     document.documentElement.className = themeName;
+		color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
+		document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",color,"")
 }
 
 function changetheme() {
    if (localStorage.getItem('theme') === 'theme-dark'){
 		 setTheme('theme-light');
-		 color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
-		 document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",color,"")
 		 document.getElementById("mode").className = "icon icon-mode-dark";
 
 
    } else {
 		 setTheme('theme-dark');
 		 color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
-		 document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",color,"")
-		 document.getElementById("mode").className = " icon icon-mode-light";
-
    }
 }
