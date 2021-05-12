@@ -123,7 +123,7 @@ svg.append("rect")
 	.attr("height", 30)
 	.attr("width", Brushwidth+5)
 	.attr("rx",5 )
-	.style("fill", '#111111')
+	.style("fill", 'var(--Background)')
 	.style("opacity",0.7);
 
 svg.append("g")
@@ -216,12 +216,15 @@ var Ploty = d3.scaleLinear().range([Plotheight, Plotmargin.top	]);
 function circle_select(d) {
 	// PROBLEM WITH SELECTION AND CHANGING DATA (TIMELINE BRUSH WILL CHANGE POSITION OF SELECTED CIRCUIT)
 	// TO AVOID THAT CREATE ARRAY OF SELECTED POINTS AND REMOVE IT FROM DATA POINTS, UPDATE BOTH DATA ?
-	g.selectAll("circle")
-	.attr("fill","#D20000")
-
-	this.setAttribute("fill", "#fff"); // add hover class to emphasize
 	plot_id = d[0]
 	plot_name=d[3]
+
+	g.selectAll("circle")
+	.attr("stroke-width",function(d) {if (d[0]==plot_id){return '1.5px'}else{return "0px"}})
+	.attr("fill",function(d) {if (d[0]==plot_id){return 'var(--extreme2)'}else{return "var(--Accent)"}})
+
+	this.setAttribute("fill", "var(--extreme2)"); // add hover class to emphasize
+
 	UpdatePlot(plot_id,plot_name)
 
 }
@@ -238,9 +241,9 @@ function tipMouseover(d) {
 	this.setAttribute("class", "circle-hover"); // add hover class to emphasize
 	this.setAttribute("r",bigr)
 
-	var html  = "<span  style='font-weight:bold;color:#999999'> " + d[1] + ", "+ d[2] + " </span><br/>" +
-	"<span  style='font-weight:bold;color:#D20000'> " + d[3] +" </span><br/>" +
-	"<span  style='color:#999999'> Count: " + d[4] + " races. </span>";
+	var html  = "<span  style='font-weight:bold;color:var(--Foreground)'> " + d[1] + ", "+ d[2] + " </span><br/>" +
+	"<span  style='font-weight:bold;color:var(--Accent)'> " + d[3] +" </span><br/>" +
+	"<span  style='color:var(--Foreground)'> Count: " + d[4] + " races. </span>";
 
 	tooltip.html(html)
 	.style("left", (d3.event.pageX + 15) + "px")
@@ -297,16 +300,21 @@ function updateMapPoints(data) {
 	.attr("cx",function(d) {if (d){return d[5][0]; }})
 	.attr("cy",function(d) {if (d){return d[5][1]; }})
 	.attr('r',r)
+	.attr("fill",function(d) {if (d[0]==plot_id){return 'var(--extreme2)'}else{return "var(--Accent)"}})
+	.attr("stroke-width",function(d) {if (d[0]==plot_id){return '1.5px'}else{return "0px"}})
 	.on("mouseover", tipMouseover)
 	.on("mouseout", tipMouseout)
 
 	circles.exit().remove() // exiting points
 
 	circles.enter().append("circle") // new entering points
-	.attr("fill", "#D20000")
+	.attr("fill", "var(--Accent)")
 	.attr("cx", function(d) {if (d){return d[5][0] }})
 	.attr("cy", function(d) {if (d){return d[5][1] }})
 	.attr('r',r)
+	.attr('stroke', 'var(--extreme1)')
+	.attr("stroke-width",'0px')
+	.attr('vector-effect', 'non-scaling-stroke')
 	.on("mouseover", tipMouseover)
 	.on("mouseout", tipMouseout)
 
@@ -393,8 +401,8 @@ function UpdatePlot(id,name){
 
       // Three function that change the tooltip when user hover / move / leave a cell
       var mouseover = function(d) {
-				var html  = "<span  style='font-weight:bold;color:#999999'> " +d[0]+" - "+ d[2] + " </span><br/>" +
-				"<span  style='font-weight:bold;color:#D20000'> " +  millisToMinutesAndSeconds(d[1],0) +" </span>";
+				var html  = "<span  style='font-weight:bold;color:var(--Foreground)'> " +d[0]+" - "+ d[2] + " </span><br/>" +
+				"<span  style='font-weight:bold;color:var(--Accent)'> " +  millisToMinutesAndSeconds(d[1],0) +" </span>";
 
 				tooltip.html(html)
 				.style("left", (d3.event.pageX + 15) + "px")
@@ -418,7 +426,7 @@ function UpdatePlot(id,name){
         .attr("cy", function (d) { return Ploty(d[1]); } )
         .attr("r", 5)
 				.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
-        .style("fill", "#D20000")
+        .style("fill", "var(--Accent)")
 				.on("mouseover", mouseover)
 				.on("mouseout", mouseout);
 
@@ -429,7 +437,7 @@ function UpdatePlot(id,name){
 
 	Plotsvg.append("path")
 			.attr("fill", "none")
-      .attr("stroke", "#D20000")
+      .attr("stroke", "var(--Accent)")
       .attr("stroke-width",1)
 			.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
       .attr("d",pathData)
@@ -472,6 +480,8 @@ function tabulate(data,columns,iddiv) {
 							.data(data, function(d,i){   // don't need the first row
 								return d;
 							}).enter().append("tr")
+							.attr('class','first')
+							.attr('class',function(d,i) {if(i==0){return 'first'}else if(i==1){return 'second'}else{return ''}})
 							/*
 	rows.exit().remove();
 	rows.enter().append("tr");*/
@@ -504,4 +514,27 @@ function updateTable(){
 
 		})
 
+}
+
+
+function setTheme(themeName) {
+    localStorage.setItem('theme', themeName);
+    document.documentElement.className = themeName;
+}
+
+function changetheme() {
+   if (localStorage.getItem('theme') === 'theme-dark'){
+		 setTheme('theme-light');
+		 color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
+		 document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",color,"")
+		 document.getElementById("mode").className = "icon icon-mode-dark";
+
+
+   } else {
+		 setTheme('theme-dark');
+		 color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
+		 document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",color,"")
+		 document.getElementById("mode").className = " icon icon-mode-light";
+
+   }
 }
