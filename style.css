@@ -188,3 +188,11 @@ rect.selection {
 	opacity: 1;
 	stroke: var(--Accent);
 }
+
+.st0{fill:#999;}
+.st1{fill:var(--extreme1);}
+
+svg.colored {
+  --light:var(--Foreground);
+  --dark:var(--Background);
+}

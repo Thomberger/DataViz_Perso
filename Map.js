@@ -1,6 +1,6 @@
 //////////////////////////////////////
 // Parameters
-
+setTheme('theme-dark')
 
 const Mapwidth = 1000; // change in css
 const Mapheight = 600;
@@ -378,6 +378,7 @@ function UpdatePlot(id,name){
 		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"<br>By: "+besttime[2]+"    - In: "+besttime[0]
 		img.src = 'Circuit-svg/'+name+'.svg';
 
+		transformsvg(id)
 
 		Plotx.domain(d3.extent(data, function(d) {return d[0];}))
 		Ploty.domain([d3.extent(data, function(d) {return d[1];})[0]*0.8,d3.extent(data, function(d) {return d[1];})[1]*1.1])
@@ -520,8 +521,13 @@ function updateTable(){
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
     document.documentElement.className = themeName;
-		color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
-		document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",color,"")
+		Foreground_color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
+		Background_color = getComputedStyle(document.documentElement).getPropertyValue('--Background')
+
+
+		//document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",Foreground_color,"")
+		//document.getElementById("youtube").getSVGDocument().getElementById("style").style.setProperty("fill",Foreground_color,"")
+
 }
 
 function changetheme() {
@@ -532,6 +538,10 @@ function changetheme() {
 
    } else {
 		 setTheme('theme-dark');
-		 color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
+		 document.getElementById("mode").className = "icon icon-mode-light";
    }
+}
+
+function transformsvg(id1,id2){
+
 }
