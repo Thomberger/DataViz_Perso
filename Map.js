@@ -13,6 +13,7 @@ init_bigr = 5
 bigr = init_bigr
 init_stroke = 2
 stroke = init_stroke
+scale = 1
 
 projection = d3.geoWinkel3().precision(0.01).scale(195).translate([Mapwidth / 2, Mapheight / 2]);
 
@@ -372,7 +373,7 @@ function updateMapPoints(data) {
 	.attr("cx",function(d) {if (d){return d[5][0]; }})
 	.attr("cy",function(d) {if (d){return d[5][1]; }})
 	.attr('r',r)
-	.attr("fill",function(d) {if (d[0]==circuit_plot[0]){return 'var(--extreme2)'}else{return "var(--Accent)"}})
+	.attr("fill",function(d) {if (scale<=3000){if (d[0]==circuit_plot[0]){return 'var(--extreme2)'}else{return "var(--Accent)"}}else{return 'none'}})
 	.attr("stroke-width",function(d) {if (d[0]==circuit_plot[0]){return '1.5px'}else{return "0px"}})
 	.on("mouseover", tipMouseover)
 	.on("mouseout", tipMouseout)
