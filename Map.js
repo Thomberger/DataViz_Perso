@@ -66,13 +66,27 @@ g.append("g")
 
 updateData(1950,2020)
 
-const Dstanding = d3.csv('Data_processed/Driver_standings.csv').then(function(data){return d3.nest()
+const Dstanding = d3.csv('Data_processed/Driver_standings.csv').then(function(data){return data})
+
+const Dstanding_Y = Dstanding.then(function(data){return d3.nest()
 	.key(function(d) { return d.year; })
 	.entries(data);});
 
-const Cstanding = d3.csv('Data_processed/Constructor_standings.csv').then(function(data){return d3.nest()
+const Dstanding_D = Dstanding.then(function(data){return d3.nest()
+	.key(function(d) { return d.name; })
+	.entries(data);});
+
+const Cstanding = d3.csv('Data_processed/Constructor_standings.csv').then(function(data){return data})
+
+const Cstanding_Y = Cstanding.then(function(data){return d3.nest()
 	.key(function(d) { return d.year; })
 	.entries(data);});
+
+const Cstanding_C = Cstanding.then(function(data){return d3.nest()
+	.key(function(d) { return d.name; })
+	.entries(data);});
+
+
 
 
 updateTable()
@@ -186,7 +200,7 @@ function brushend(){
 	//ROUND TO YEAR AND UPDATE BRUSH SELECTION
 	//RESET BRUSH IF EMPTY
 	if (!d3.event.sourceEvent) return; // Only transition after input.
-	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(circuit_plot);updateTable();return;}; // empty selections = select all.
+	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot_circuit(circuit_plot);UpdatePlot_driver(driver_plot);UpdatePlot_constructor(constructor_plot);updateTable();return;}; // empty selections = select all.
 	var d0 = d3.event.selection.map(x.invert),
 	d1 = d0.map(d3.timeYear.round);
 	// If empty when rounded, use floor & ceil instead.
@@ -214,7 +228,9 @@ function brush() {
 	minYear = d3.timeFormat("%Y")(d1[0])
 	maxYear = d3.timeFormat("%Y")(d1[1])
 	updateData(minYear,maxYear)
-	UpdatePlot(circuit_plot)
+	UpdatePlot_circuit(circuit_plot)
+	UpdatePlot_driver(driver_plot)
+	UpdatePlot_constructor(constructor_plot)
 	updateTable()
 
 
@@ -225,6 +241,8 @@ function brush() {
 
 // External value for brushing update
 circuit_plot=0
+driver_plot = 0
+constructor_plot = 0
 
 var Plotmargin = {
 	top: 0,
@@ -279,13 +297,10 @@ function circle_select(d) {
 
 	}
 })
+	driver_plot = 0
 	circuit_plot = d
-
-
-
-
-
-	UpdatePlot(circuit_plot)
+	constructor_plot = 0
+	UpdatePlot_circuit(circuit_plot)
 
 }
 
@@ -415,8 +430,8 @@ function getCol(matrix, col){
 	return column;
 }
 
-function UpdatePlot(circuit){
-	if (circuit_plot[0] != 0) {
+function UpdatePlot_circuit(circuit){
+	if (circuit_plot != 0) {
 	var h1 = document.getElementById("Circuit");
 	var h2 = document.getElementById("Circuit_stat");
 
@@ -447,8 +462,6 @@ function UpdatePlot(circuit){
 
 	 	h1.innerHTML = circuit[3] + "  -  " + data[0][0] + "-" + data[data.length-1][0]
 		h2.innerHTML = "Length: "+0 +"km   Altitude: "+circuit[6] + "m<br>Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"<br>By: "+besttime[2]+"    - In: "+besttime[0]
-
-		transformsvg(id)
 
 		Plotx.domain(d3.extent(data, function(d) {return d[0];}))
 		Ploty.domain([d3.extent(data, function(d) {return d[1];})[0]*0.8,d3.extent(data, function(d) {return d[1];})[1]*1.1])
@@ -534,7 +547,7 @@ function millisToMinutesAndSeconds(millis,short) {
   return string;
 }
 
-function tabulate(data,columns,iddiv) {
+function tabulate(data,columns,iddiv,link) {
 	d3.select(iddiv).select('table').remove()
   var table = d3.select(iddiv).append('table').attr("align","center")
 	var thead = table.append('thead')
@@ -551,8 +564,10 @@ function tabulate(data,columns,iddiv) {
 							.data(data, function(d,i){   // don't need the first row
 								return d;
 							}).enter().append("tr")
+							.on("click",link)
 							.attr('class','first')
 							.attr('class',function(d,i) {if(i==0){return 'first'}else if(i==1|i==2){return 'second'}else{return ''}})
+
 
 	var cells = rows.selectAll('td')
 								.data(function(d) {return d; })
@@ -567,25 +582,25 @@ function updateTable(){
 	var h1 = document.getElementById("Driver_header");
 	h1.innerHTML = "Driver standings of season " + (maxYear-1)
 
-	Dstanding.then(function(d){
+	Dstanding_Y.then(function(d){
 		filteredData=[]
 		d.forEach(function(v){
 			if(maxYear-1==v.key){
 				v.values.forEach(function (t){
-						filteredData.push([t.forename + " " + t.surname,t.points,t.wins])
+						filteredData.push([t.name,t.points,t.wins])
 					})
 				}})
 
 
 			data = filteredData
-			tabulate(data,["Driver","Points","Wins"],'#Driver_table')
+			tabulate(data,["Driver","Points","Wins"],'#Driver_table',driver_select)
 
 		})
 
 		var h1 = document.getElementById("Constructor_header");
 		h1.innerHTML = "Constructor standings of season " + (maxYear-1)
 
-		Cstanding.then(function(d){
+		Cstanding_Y.then(function(d){
 			filteredData=[]
 			d.forEach(function(v){
 				if(maxYear-1==v.key){
@@ -596,12 +611,239 @@ function updateTable(){
 
 
 				data2 = filteredData
-				tabulate(data2,["Constructor","Points","Wins"],'#Constructor_table')
+				tabulate(data2,["Constructor","Points","Wins"],'#Constructor_table',constructor_select)
 
 			})
 
 
 }
+
+function driver_select(d) {
+	console.log('driver selction',d)
+	h1 = document.getElementById("plot__circuit");
+	h1.scrollIntoView({block: "end", inline: "nearest",behavior: 'smooth'});
+	driver_plot = d
+	circuit_plot = 0
+	constructor_plot = 0
+	UpdatePlot_driver(driver_plot)
+
+}
+
+function constructor_select(d) {
+	console.log('driver selction',d)
+	h1 = document.getElementById("plot__circuit");
+	h1.scrollIntoView({block: "end", inline: "nearest",behavior: 'smooth'});
+	driver_plot = 0
+	circuit_plot = 0
+	constructor_plot = d
+	UpdatePlot_constructor(constructor_plot)
+}
+
+function UpdatePlot_driver(driver){
+	if (driver != 0){
+		var h1 = document.getElementById("Circuit");
+		var h2 = document.getElementById("Circuit_stat");
+
+		Dstanding_D.then(function(data){
+			bestpos = Infinity
+			filteredData=[]
+			data.forEach(function(v){
+
+				if(driver[0]==v.key){
+					v.values.forEach(function (t){
+							if (t.year>=minYear & t.year<maxYear){
+								filteredData.push([t.year,parseInt(t.position),t.points,t.wins])
+
+								if(parseInt(t.position) <= bestpos){
+									bestpos = parseInt(t.position)
+
+							}
+						}}
+					)}})
+				data = filteredData
+				console.log(data)
+
+		if (data.length==0){
+
+			h1.innerHTML = driver[0]
+			h2.innerHTML = "Driver never participate during this time range"
+			Plotsvg.selectAll("g,path").remove()
+		}
+		else{
+
+			h1.innerHTML = driver[0]
+			h2.innerHTML = "Number of race win:" + 0 + ", Win ratio: " + 0 + ", Best championship final position: "+ bestpos +", Number of championship win: "+ 0
+
+
+			Plotx.domain(d3.extent(data, function(d) {return d[0];}))
+			Ploty.domain([0,d3.extent(data, function(d) {return d[1];})[1]*1.1])
+
+			Plotsvg.selectAll("g,path").remove()
+			g_plot = Plotsvg.append("g")
+					.attr("transform","translate(" + Plotmargin.left + "," + Plotmargin.top + ")");
+
+			g_plot.append("g")
+					 .attr("transform", "translate(0," + Plotheight + ")")
+					 .call(d3.axisBottom(Plotx).ticks(data.length).tickFormat(d3.format(".0f")));
+
+			g_plot.append("g")
+			.attr("transform", "translate(" + Plotmargin.left + ",0)")
+			 .call(d3.axisLeft(Ploty).ticks(d3.extent(data, function(d) {return d[1];})[1]).tickFormat(function(d,i){return i === 0 ?   null:d}));
+
+			 var Tooltip = d3.select("#circuitdiv")
+				.append("div")
+				.style("opacity", 0)
+				.attr("class", "tooltip")
+
+				// Three function that change the tooltip when user hover / move / leave a cell
+				var mouseover = function(d) {
+					var html  = "<span  style='font-weight:bold;color:var(--Foreground)'> " +d[0]+" </span><br/>" +
+					"<span  style='font-weight:bold;color:var(--Accent)'> Position: " +  d[1] +" </span><br/>" +
+					"<span  style='font-weight:bold;color:var(--Foreground)'> Number of wins: " +  d[3] +", Number of points: "+ d[2]+" </span>";
+
+					tooltip.html(html)
+					.style("left", (d3.event.pageX + 15) + "px")
+					.style("top", (d3.event.pageY - 14) + "px")
+					.transition()
+					.duration(200) // ms
+					.style("opacity", 0.9) // started as 0!
+				}
+				var mouseout = function(d) {
+					tooltip.transition()
+					.duration(500) // ms
+					.style("opacity", 0); // don't care about position!
+				}
+
+			Plotsvg.append('g')
+					.selectAll("circle")
+					.data(data)
+					.enter()
+					.append("circle")
+					.attr("cx", function (d) { return Plotx(d[0]); } )
+					.attr("cy", function (d) { return Ploty(d[1]); } )
+					.attr("r", 5)
+					.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
+					.style("fill", "var(--Accent)")
+					.on("mouseover", mouseover)
+					.on("mouseout", mouseout);
+
+			modifieddata=[]
+			data.forEach(function(d){modifieddata.push([Plotx(d[0]),Ploty(d[1])]);})
+			var lineGenerator = d3.line();
+			var pathData = lineGenerator(modifieddata);
+
+			Plotsvg.append("path")
+				.attr("fill", "none")
+				.attr("stroke", "var(--Accent)")
+				.attr("stroke-width",1)
+				.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
+				.attr("d",pathData)
+			}
+			})
+			}}
+
+function UpdatePlot_constructor(constructor){
+	if (constructor != 0){
+		var h1 = document.getElementById("Circuit");
+		var h2 = document.getElementById("Circuit_stat");
+
+		Cstanding_C.then(function(data){
+			bestpos = Infinity
+			filteredData=[]
+			data.forEach(function(v){
+
+				if(constructor[0]==v.key){
+					v.values.forEach(function (t){
+							if (t.year>=minYear & t.year<maxYear){
+								filteredData.push([t.year,parseInt(t.position),t.points,t.wins])
+
+								if(parseInt(t.position) <= bestpos){
+									bestpos = parseInt(t.position)
+
+							}
+						}}
+					)}})
+				data = filteredData
+				console.log(data)
+
+		if (data.length==0){
+
+			h1.innerHTML = constructor[0]
+			h2.innerHTML = "Constructor never participate during this time range. "
+			Plotsvg.selectAll("g,path").remove()
+		}
+		else{
+
+			h1.innerHTML = constructor[0]
+			h2.innerHTML = "Number of race win:" + 0 + ", Best championship final position: "+ bestpos +", Number of championship win: "+ 0
+
+
+			Plotx.domain(d3.extent(data, function(d) {return d[0];}))
+			Ploty.domain([0,d3.extent(data, function(d) {return d[1];})[1]*1.1])
+
+			Plotsvg.selectAll("g,path").remove()
+			g_plot = Plotsvg.append("g")
+					.attr("transform","translate(" + Plotmargin.left + "," + Plotmargin.top + ")");
+
+			g_plot.append("g")
+					 .attr("transform", "translate(0," + Plotheight + ")")
+					 .call(d3.axisBottom(Plotx).ticks(data.length).tickFormat(d3.format(".0f")));
+
+			g_plot.append("g")
+			.attr("transform", "translate(" + Plotmargin.left + ",0)")
+			 .call(d3.axisLeft(Ploty).ticks(d3.extent(data, function(d) {return d[1];})[1]).tickFormat(function(d,i){return i === 0 ?   null:d}));
+
+			 var Tooltip = d3.select("#circuitdiv")
+				.append("div")
+				.style("opacity", 0)
+				.attr("class", "tooltip")
+
+				// Three function that change the tooltip when user hover / move / leave a cell
+				var mouseover = function(d) {
+					var html  = "<span  style='font-weight:bold;color:var(--Foreground)'> " +d[0]+" </span><br/>" +
+					"<span  style='font-weight:bold;color:var(--Accent)'> Position: " +  d[1] +" </span><br/>" +
+					"<span  style='font-weight:bold;color:var(--Foreground)'> Number of wins: " +  d[3] +", Number of points: "+ d[2]+" </span>";
+
+					tooltip.html(html)
+					.style("left", (d3.event.pageX + 15) + "px")
+					.style("top", (d3.event.pageY - 14) + "px")
+					.transition()
+					.duration(200) // ms
+					.style("opacity", 0.9) // started as 0!
+				}
+				var mouseout = function(d) {
+					tooltip.transition()
+					.duration(500) // ms
+					.style("opacity", 0); // don't care about position!
+				}
+
+			Plotsvg.append('g')
+					.selectAll("circle")
+					.data(data)
+					.enter()
+					.append("circle")
+					.attr("cx", function (d) { return Plotx(d[0]); } )
+					.attr("cy", function (d) { return Ploty(d[1]); } )
+					.attr("r", 5)
+					.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
+					.style("fill", "var(--Accent)")
+					.on("mouseover", mouseover)
+					.on("mouseout", mouseout);
+
+			modifieddata=[]
+			data.forEach(function(d){modifieddata.push([Plotx(d[0]),Ploty(d[1])]);})
+			var lineGenerator = d3.line();
+			var pathData = lineGenerator(modifieddata);
+
+			Plotsvg.append("path")
+				.attr("fill", "none")
+				.attr("stroke", "var(--Accent)")
+				.attr("stroke-width",1)
+				.attr("transform", "translate(" + Plotmargin.left + "," + Plotmargin.top + ")")
+				.attr("d",pathData)
+			}
+			})
+			}}
 
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
@@ -621,8 +863,4 @@ function changetheme() {
 		 setTheme('theme-dark');
 		 document.getElementById("mode").className = "icon icon-mode-light";
    }
-}
-
-function transformsvg(id1,id2){
-
 }

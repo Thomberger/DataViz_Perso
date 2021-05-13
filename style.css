@@ -71,7 +71,7 @@ span {
 .containerBig{
 	display: grid;
 	grid-template-columns: 14vw 40vw 30vw 14vw;
-  grid-template-rows: 8vh 84vh 15vh 45vh 50vh;
+  grid-template-rows: 8vh 84vh 15vh 45vh;
 	column-gap: 0px;
   row-gap: 0px;
 	justify-content: stretch;
