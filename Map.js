@@ -46,6 +46,8 @@ const locations = d3.csv('Data_processed/races.csv').then(function(data){return 
 	.entries(data);});
 filteredLocation = []
 
+const circuits_tracks = d3.json("Data/f1-circuits.geojson").then(function(worldData) {return worldData.features})
+
 const races = d3.csv('Data_processed/laps.csv').then(function(data){return d3.nest()
 	.key(function(d) { return d.circuitId; })
 	.entries(data);});
@@ -67,6 +69,10 @@ const Dstanding = d3.csv('Data_processed/Driver_standings.csv').then(function(da
 	.key(function(d) { return d.year; })
 	.entries(data);});
 
+const Cstanding = d3.csv('Data_processed/Constructor_standings.csv').then(function(data){return d3.nest()
+	.key(function(d) { return d.year; })
+	.entries(data);});
+
 
 updateTable()
 
@@ -76,18 +82,38 @@ function brushMap(){
 	d = d3.event.selection
 	if (!d) {
 		scale =1
-		g.transition()
-      .duration(750)
-			.attr("transform", "translate(" + [0,0] + ")scale(" + scale + ")");
+
+	g.transition()
+	  .duration(750)
+		.ease(d3.easePolyOut.exponent(20))
+		.attr("transform", "translate(" + [0,0] + ")scale(" + scale + ")")
+		.on("start",function(){
+
+			g.selectAll('circle').transition()
+				  .delay(200)
+			.attr("stroke-width",function(d) {if (d[0]==circuit_plot[0]){return '1.5px'}else{return "0px"}})
+			.attr("fill",function(d) {if (d[0]==circuit_plot[0]){return 'var(--extreme2)'}else{return "var(--Accent)"}})
+			.attr('r',init_r)
+		})
+
+
+
+
+	g.selectAll('#circuit')
+	.attr("stroke", "none") //var(--Foreground)
+
+
+
 	}
 	else{
+		console.log(d)
 			dx = d[1][0] - d[0][0],
       dy = d[1][1] - d[0][1],
       xmap = (d[0][0] + d[1][0]) / 2,
       ymap = (d[0][1] + d[1][1]) / 2,
       scale = 1 / Math.max(dx / Mapwidth, dy / Mapheight),
       translate = [Mapwidth / 2 - scale * xmap, Mapheight / 2 - scale * ymap];
-
+console.log(scale,translate)
 		g.transition()
       .duration(750)
 			.attr("transform", "translate(" + translate + ")scale(" + scale + ")")
@@ -159,7 +185,7 @@ function brushend(){
 	//ROUND TO YEAR AND UPDATE BRUSH SELECTION
 	//RESET BRUSH IF EMPTY
 	if (!d3.event.sourceEvent) return; // Only transition after input.
-	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(plot_id,plot_name);updateTable();return;}; // empty selections = select all.
+	if (!d3.event.selection) {minYear = "1950";maxYear = "2021";updateData(minYear,maxYear);UpdatePlot(circuit_plot);updateTable();return;}; // empty selections = select all.
 	var d0 = d3.event.selection.map(x.invert),
 	d1 = d0.map(d3.timeYear.round);
 	// If empty when rounded, use floor & ceil instead.
@@ -187,7 +213,7 @@ function brush() {
 	minYear = d3.timeFormat("%Y")(d1[0])
 	maxYear = d3.timeFormat("%Y")(d1[1])
 	updateData(minYear,maxYear)
-	UpdatePlot(plot_id,plot_name)
+	UpdatePlot(circuit_plot)
 	updateTable()
 
 
@@ -197,8 +223,7 @@ function brush() {
 // circuit selection
 
 // External value for brushing update
-plot_id=0
-plot_name=0
+circuit_plot=0
 
 var Plotmargin = {
 	top: 0,
@@ -214,20 +239,56 @@ var Plotx = d3.scaleLinear().range([Plotmargin.left, Plotwidth]);
 var Ploty = d3.scaleLinear().range([Plotheight, Plotmargin.top	]);
 
 function circle_select(d) {
-	// PROBLEM WITH SELECTION AND CHANGING DATA (TIMELINE BRUSH WILL CHANGE POSITION OF SELECTED CIRCUIT)
-	// TO AVOID THAT CREATE ARRAY OF SELECTED POINTS AND REMOVE IT FROM DATA POINTS, UPDATE BOTH DATA ?
-	plot_id = d[0]
-	plot_name=d[3]
+	h1 = document.getElementById("plot__circuit");
+	circuits_tracks.then(function(t){
+		temp=1
+		t.forEach((item, i) => {
+			if(item.properties.Name==d[3]){
+				temp=0
+				console.log(item.bbox)
+				bbox = [projection([item.bbox[0],item.bbox[1]]),projection([item.bbox[2],item.bbox[3]])]
+				console.log(bbox)
+				dx = bbox[1][0] - bbox[0][0],
+				dy = bbox[1][1] - bbox[0][1],
+				xmap = (bbox[0][0] + bbox[1][0]) / 2,
+				ymap = (bbox[0][1] + bbox[1][1]) / 2,
+				scale = 0.3 / Math.max(dx / Mapwidth, dy / Mapheight),
+				translate = [Mapwidth / 2 - scale * xmap, Mapheight / 2 - scale * ymap];
 
-	g.selectAll("circle")
-	.attr("stroke-width",function(d) {if (d[0]==plot_id){return '1.5px'}else{return "0px"}})
-	.attr("fill",function(d) {if (d[0]==plot_id){return 'var(--extreme2)'}else{return "var(--Accent)"}})
+				console.log(scale,translate)
+				g.transition()
+				.duration(750)
+				.attr("transform", "translate(" + translate + ")scale(" +scale + ")")
+				.on("end",function(){h1.scrollIntoView({block: "end", inline: "nearest",behavior: 'smooth'});})
 
-	this.setAttribute("fill", "var(--extreme2)"); // add hover class to emphasize
+				g.selectAll('#circuit')
+				.attr("stroke", "var(--Foreground)") //var(--Foreground)
 
-	UpdatePlot(plot_id,plot_name)
+				g.selectAll("circle")
+				.attr("fill","none")
+			}
+		});
+	if (temp){
+		g.selectAll("circle")
+		.attr("stroke-width",function(d) {if (d[0]==circuit_plot[0]){return '1.5px'}else{return "0px"}})
+		.attr("fill",function(d) {if (d[0]==circuit_plot[0]){return 'var(--extreme2)'}else{return "var(--Accent)"}});
+
+		h1.scrollIntoView({block: "end", inline: "nearest",behavior: 'smooth'});
+
+
+	}
+})
+	circuit_plot = d
+
+
+
+
+
+	UpdatePlot(circuit_plot)
 
 }
+
+
 
 //////////////////////////////////////
 // Tool tip
@@ -272,7 +333,17 @@ function drawGlobe() {
 		.attr("class", "country")
 		.attr("clip-path", "url(#clip)")
 		.attr("d", path)
-	})
+	}).then(circuits_tracks.then(function(d){
+		g.selectAll(".segment")
+		.data(d)
+		.enter().append("path")
+		.attr("id",'circuit')
+		.attr("stroke-width", "5px")
+		.attr("stroke", "none") //var(--Foreground)  none
+		.attr("fill","none")
+		.attr("vector-effect","non-scaling-stroke")
+		.attr("d", path)
+	}))
 }
 
 function updateData(minYear,maxYear){
@@ -281,10 +352,11 @@ function updateData(minYear,maxYear){
 		filteredLocation = []
 		data.forEach(function(d){
 			d.values.forEach(function (v){
-				if (v.year>=minYear & v.year<maxYear){
+				if (v.year>=minYear & parseInt(v.year)<=maxYear){
 					id = getCol(filteredLocation,0).indexOf(v.circuitId)
 					if (id==-1){
-						filteredLocation.push([v.circuitId,v.location,v.country,v.name,+1,projection([v.lng, v.lat])])
+
+							filteredLocation.push([v.circuitId,v.location,v.country,v.name,+1,projection([v.lng, v.lat]),v.alt])
 					}
 					else{
 						filteredLocation[id][4] += 1
@@ -300,8 +372,8 @@ function updateMapPoints(data) {
 	.attr("cx",function(d) {if (d){return d[5][0]; }})
 	.attr("cy",function(d) {if (d){return d[5][1]; }})
 	.attr('r',r)
-	.attr("fill",function(d) {if (d[0]==plot_id){return 'var(--extreme2)'}else{return "var(--Accent)"}})
-	.attr("stroke-width",function(d) {if (d[0]==plot_id){return '1.5px'}else{return "0px"}})
+	.attr("fill",function(d) {if (d[0]==circuit_plot[0]){return 'var(--extreme2)'}else{return "var(--Accent)"}})
+	.attr("stroke-width",function(d) {if (d[0]==circuit_plot[0]){return '1.5px'}else{return "0px"}})
 	.on("mouseover", tipMouseover)
 	.on("mouseout", tipMouseout)
 
@@ -342,17 +414,16 @@ function getCol(matrix, col){
 	return column;
 }
 
-function UpdatePlot(id,name){
-	if (plot_id != 0) {
+function UpdatePlot(circuit){
+	if (circuit_plot[0] != 0) {
 	var h1 = document.getElementById("Circuit");
 	var h2 = document.getElementById("Circuit_stat");
-	var img = document.getElementById("circuitsvg");
 
 	races.then(function(data){
 		besttime = [-1,999999,"No name"]
 		filteredData=[]
 		data.forEach(function(v){
-			if(id==v.key){
+			if(circuit[0]==v.key){
 				v.values.forEach(function (t){
 						if (t.year>=minYear & t.year<maxYear){
 							filteredData.push([t.year,parseInt(t.milliseconds),t.forename + " " + t.surname])
@@ -367,16 +438,14 @@ function UpdatePlot(id,name){
 
 	if (data.length==0){
 
-		h1.innerHTML = "No lap time data for selected circuit and time-range.<br>Lap time were recorded starting from 1996."
-		h2.innerHTML = ""
-		img.src = 'Circuit-svg/No-data.jpg';
+		h1.innerHTML = circuit[3]
+		h2.innerHTML = "Length: "+0 +"km   Altitude: "+circuit[6] + "m<br>No lap time data for selected circuit and time-range.<br>Lap time were recorded starting from 1996."
 		Plotsvg.selectAll("g,path").remove()
 	}
 	else{
 
-	 	h1.innerHTML = name + "  -  " + data[0][0] + "-" + data[data.length-1][0]
-		h2.innerHTML = "Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"<br>By: "+besttime[2]+"    - In: "+besttime[0]
-		img.src = 'Circuit-svg/'+name+'.svg';
+	 	h1.innerHTML = circuit[3] + "  -  " + data[0][0] + "-" + data[data.length-1][0]
+		h2.innerHTML = "Length: "+0 +"km   Altitude: "+circuit[6] + "m<br>Best lap time: "+millisToMinutesAndSeconds(besttime[1],0)+"<br>By: "+besttime[2]+"    - In: "+besttime[0]
 
 		transformsvg(id)
 
@@ -465,7 +534,7 @@ function millisToMinutesAndSeconds(millis,short) {
 }
 
 function tabulate(data,columns,iddiv) {
-	d3.select('table').remove()
+	d3.select(iddiv).select('table').remove()
   var table = d3.select(iddiv).append('table').attr("align","center")
 	var thead = table.append('thead')
 	var tbody = table.append('tbody')
@@ -483,9 +552,6 @@ function tabulate(data,columns,iddiv) {
 							}).enter().append("tr")
 							.attr('class','first')
 							.attr('class',function(d,i) {if(i==0){return 'first'}else if(i==1|i==2){return 'second'}else{return ''}})
-							/*
-	rows.exit().remove();
-	rows.enter().append("tr");*/
 
 	var cells = rows.selectAll('td')
 								.data(function(d) {return d; })
@@ -500,9 +566,9 @@ function updateTable(){
 	var h1 = document.getElementById("Driver_header");
 	h1.innerHTML = "Driver standings of season " + (maxYear-1)
 
-	Dstanding.then(function(data){
+	Dstanding.then(function(d){
 		filteredData=[]
-		data.forEach(function(v){
+		d.forEach(function(v){
 			if(maxYear-1==v.key){
 				v.values.forEach(function (t){
 						filteredData.push([t.forename + " " + t.surname,t.points,t.wins])
@@ -515,18 +581,32 @@ function updateTable(){
 
 		})
 
-}
+		var h1 = document.getElementById("Constructor_header");
+		h1.innerHTML = "Constructor standings of season " + (maxYear-1)
 
+		Cstanding.then(function(d){
+			filteredData=[]
+			d.forEach(function(v){
+				if(maxYear-1==v.key){
+					v.values.forEach(function (t){
+							filteredData.push([t.name,t.points,t.wins])
+						})
+					}})
+
+
+				data2 = filteredData
+				tabulate(data2,["Constructor","Points","Wins"],'#Constructor_table')
+
+			})
+
+
+}
 
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
     document.documentElement.className = themeName;
 		Foreground_color = getComputedStyle(document.documentElement).getPropertyValue('--Foreground')
 		Background_color = getComputedStyle(document.documentElement).getPropertyValue('--Background')
-
-
-		//document.getElementById("git").getSVGDocument().getElementById("git").style.setProperty("fill",Foreground_color,"")
-		//document.getElementById("youtube").getSVGDocument().getElementById("style").style.setProperty("fill",Foreground_color,"")
 
 }
 

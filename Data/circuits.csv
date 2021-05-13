@@ -1,5 +1,5 @@
 circuitId,circuitRef,name,location,country,lat,lng,alt,url
-1,"albert_park","Albert Park Grand Prix Circuit","Melbourne","Australia",-37.8497,144.968,10,"http://en.wikipedia.org/wiki/Melbourne_Grand_Prix_Circuit"
+1,"albert_park","Albert Park Circuit","Melbourne","Australia",-37.8497,144.968,10,"http://en.wikipedia.org/wiki/Melbourne_Grand_Prix_Circuit"
 2,"sepang","Sepang International Circuit","Kuala Lumpur","Malaysia",2.76083,101.738,18,"http://en.wikipedia.org/wiki/Sepang_International_Circuit"
 3,"bahrain","Bahrain International Circuit","Sakhir","Bahrain",26.0325,50.5106,7,"http://en.wikipedia.org/wiki/Bahrain_International_Circuit"
 4,"catalunya","Circuit de Barcelona-Catalunya","Montmeló","Spain",41.57,2.26111,109,"http://en.wikipedia.org/wiki/Circuit_de_Barcelona-Catalunya"
@@ -20,7 +20,7 @@ circuitId,circuitRef,name,location,country,lat,lng,alt,url
 19,"indianapolis","Indianapolis Motor Speedway","Indianapolis","USA",39.795,-86.2347,223,"http://en.wikipedia.org/wiki/Indianapolis_Motor_Speedway"
 20,"nurburgring","Nürburgring","Nürburg","Germany",50.3356,6.9475,578,"http://en.wikipedia.org/wiki/N%C3%BCrburgring"
 21,"imola","Autodromo Enzo e Dino Ferrari","Imola","Italy",44.3439,11.7167,37,"http://en.wikipedia.org/wiki/Autodromo_Enzo_e_Dino_Ferrari"
-22,"suzuka","Suzuka Circuit","Suzuka","Japan",34.8431,136.541,45,"http://en.wikipedia.org/wiki/Suzuka_Circuit"
+22,"suzuka","Suzuka International Racing Course","Suzuka","Japan",34.8431,136.541,45,"http://en.wikipedia.org/wiki/Suzuka_Circuit"
 23,"osterreichring","A1-Ring","Spielburg","Austria",47.2197,14.7647,678,"http://en.wikipedia.org/wiki/A1-Ring"
 24,"yas_marina","Yas Marina Circuit","Abu Dhabi","UAE",24.4672,54.6031,3,"http://en.wikipedia.org/wiki/Yas_Marina_Circuit"
 25,"galvez","Autódromo Juan y Oscar Gálvez","Buenos Aires","Argentina",-34.6943,-58.4593,8,"http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Oscar_Alfredo_G%C3%A1lvez"

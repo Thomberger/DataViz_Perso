@@ -70,7 +70,7 @@ span {
 
 .containerBig{
 	display: grid;
-	grid-template-columns: 15vw 40vw 30vw 15vw;
+	grid-template-columns: 14vw 40vw 30vw 14vw;
   grid-template-rows: 8vh 84vh 15vh 45vh 50vh;
 	column-gap: 0px;
   row-gap: 0px;
@@ -78,7 +78,7 @@ span {
 }
 
 td {
-	font-size:0.7vw;
+	font-size:0.8vw;
 }
 th {
 	font-size:0.8vw;
@@ -187,6 +187,7 @@ rect.selection {
   fill: var(--Accent);
 	opacity: 1;
 	stroke: var(--Accent);
+  vector-effect: non-scaling-stroke;
 }
 
 .st0{fill:#999;}

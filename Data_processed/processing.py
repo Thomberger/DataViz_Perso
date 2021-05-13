@@ -11,7 +11,7 @@ races_df = pd.read_csv(Before_data_folder + "races.csv")
 races_df = races_df[races_df.year != 2021]
 
 circuits_df = pd.read_csv(Before_data_folder + "circuits.csv")
-Full_df = races_df.merge(circuits_df,on='circuitId',suffixes=['_x',''])[['location','country','circuitId','year','name','lat', 'lng']]
+Full_df = races_df.merge(circuits_df,on='circuitId',suffixes=['_x',''])[['location','country','circuitId','year','name','lat', 'lng','alt']]
 Full_df['TOT'] = np.ones((Full_df.shape[0],1))
 
 
