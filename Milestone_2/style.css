@@ -1,26 +1,3 @@
-.theme-dark {
-  --Background:   #111;
-  --Foreground:   #999;
-  --Midtone: 		  #777;
-  --Accent: 		#D20000;
-  --Secondary: 	#B30000;
-	--extreme1: 		#000;
-	--shady1:				#222;
-	--shady2:				#333;
-	--extreme2:     #fff;
-}
-
-.theme-light {
-  --Background:   #eee;
-  --Foreground:   #333;
-  --Midtone: 		  #777;
-  --Accent: 		#D20000;
-  --Secondary: 	#B30000;
-	--extreme1: 		#fff;
-	--shady1:				#ddd;
-	--shady2:				#ccc;
-	--extreme2:     #000;
-}
 
 /*
 This CSS governs the appearance of our site.
@@ -42,7 +19,7 @@ to
 /*
 Make the document fill the whole viewport, this overrides any weird defaults that browsers might have.
 */
-html, body, {
+html, body, figure {
 	width: 100%;
 	padding: 0;
 	margin: 0;
@@ -52,15 +29,22 @@ html, body, {
 
 /* Default font and size */
 body {
+
+	width: 100vw;
+	height: 100vh;
+
+	/* center vertically */
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-content: center;
+
 	/* background behind the plot */
-	background: var(--Background);
-	color: var(--Foreground);
+	background: #111111;
 
 	/* default text */
 	font-family: sans-serif;
 	font-size: 1.1rem;
-
-
 }
 
 span {
@@ -70,48 +54,61 @@ span {
 
 .containerBig{
 	display: grid;
-	grid-template-columns: 14vw 40vw 30vw 14vw;
-  grid-template-rows: 8vh 84vh 15vh 45vh;
-	column-gap: 0px;
-  row-gap: 0px;
-	justify-content: stretch;
+	grid-template-columns: 5vw 60vw 30vw 5vw;
+  grid-template-rows: 8vh 90vh 80vh 50vh;
 }
 
-td {
-	font-size:0.8vw;
-}
-th {
-	font-size:0.8vw;
-}
-.first{
-	color: var(--Accent);
-}
-.second{
-	color: var(--Secondary);
-}
+
+
 
 .full-width {
 
 }
 .Header {
-	color: var(--Accent);
-	/*border: solid green 1px;    2vh*/
+	color: #999999;
+	grid-column: 1/ span 1;
+	grid-row:1;
+	/*border: solid green 1px;*/
+
+}
+.circuitdiv{
+	grid-column: 3/ span 1;
+	grid-row:1;
+	/*border: solid yellow 1px;*/
+}
+.containersmall {
+	display: grid;
+	grid-template-columns: 60% 2% 35%;
+  grid-template-rows: auto;
 
 }
 
+.map {
+  margin: auto;
+	width: 90%;
+}
+.plot_circuit_selection {
+  margin: auto;
+	width: 100%;
+}
+
+.area {
+	fill: lightsteelblue;
+}
+
 .axis--grid .domain {
-	fill: var(--shady2);
+	fill: #333333;
 	stroke: none;
 }
 
 .axis--x .domain,
 .axis--x .tick line,
 .axis--grid .tick line {
-	stroke: var(--Foreground);
+	stroke: #999999;
 }
 
 .axis--x .tick text {
-	color: var(--Foreground);
+	color: #999999;
 	font-weight: bold;
 }
 
@@ -122,21 +119,21 @@ th {
 
 .graticule {
 	fill: none;
-	stroke: var(--extreme1);
+	stroke: #000;
 	stroke-width: .5px;
 	stroke-opacity: 0;
 }
 .sphere {
 	fill: url(#linear);
 	fill-opacity: 1;
-	stroke: var(--extreme1);
+	stroke: #000;
 	stroke-width: 1px;
 	stroke-opacity: .5;
 }
 .country {
-	fill: var(--Midtone);
+	fill: #777777;
 	fill-opacity: 1;
-	stroke: var(--Foreground);
+	stroke: #999999;
 	stroke-width: 1px;
 	vector-effect: non-scaling-stroke;
 }
@@ -146,54 +143,31 @@ th {
 		width:  auto;
 		height: auto;
 		pointer-events: none;
-		background-color: var(--shady1);
+		background-color: #222222;
 		border-radius: 4px;
 }
 
 .circle-hover {
-		stroke: var(--extreme1);
+		stroke: #000;
 		stroke-width: 2px;
 		vector-effect: non-scaling-stroke;
 }
 
 .circle-clicked {
-		fill: var(--extreme2);
-		stroke: var(--extreme1);
+		fill:#ffffff;
+		stroke: #000;
 		stroke-width: 2px;
 		vector-effect: non-scaling-stroke;
+}
+
+.plotline{
+	fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
 }
 
 .plotaxis path,
 .plotaxis line {
   fill: none;
-  stroke: var(--extreme1);
-}
-
-
-.icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-size: cover;
-}
-.icon-mode-dark {
-  background-image: url(Other_images/dark-mode.svg);
-}
-.icon-mode-light{
-  background-image: url(Other_images/light-mode.svg);
-}
-
-rect.selection {
-  fill: var(--Accent);
-	opacity: 1;
-	stroke: var(--Accent);
-  vector-effect: non-scaling-stroke;
-}
-
-.st0{fill:#999;}
-.st1{fill:var(--extreme1);}
-
-svg.colored {
-  --light:var(--Foreground);
-  --dark:var(--Background);
+  stroke: #000;
 }

@@ -1,0 +1,214 @@
+.theme-dark {
+  --Background:   #111;
+  --Foreground:   #999;
+  --Midtone: 		  #777;
+  --Accent: 		#D20000;
+  --Secondary: 	#B30000;
+	--extreme1: 		#000;
+	--shady1:				#222;
+	--shady2:				#333;
+	--extreme2:     #fff;
+}
+
+.theme-light {
+  --Background:   #eee;
+  --Foreground:   #333;
+  --Midtone: 		  #777;
+  --Accent: 		#D20000;
+  --Secondary: 	#B30000;
+	--extreme1: 		#fff;
+	--shady1:				#ddd;
+	--shady2:				#ccc;
+	--extreme2:     #000;
+}
+
+/*
+This CSS governs the appearance of our site.
+You can find the basic concepts of CSS here: https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/How_CSS_works
+*/
+
+/*
+This makes the border and padding be counted as part of the element's size.
+https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Box_model
+It switches from
+	https://mdn.mozillademos.org/files/13647/box-model-standard-small.png
+to
+	https://mdn.mozillademos.org/files/13649/box-model-alt-small.png
+*/
+* {
+	box-sizing: border-box;
+}
+
+/*
+Make the document fill the whole viewport, this overrides any weird defaults that browsers might have.
+*/
+html, body, {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+
+/* Default font and size */
+body {
+	/* background behind the plot */
+	background: var(--Background);
+	color: var(--Foreground);
+
+	/* default text */
+	font-family: sans-serif;
+	font-size: 1.1rem;
+
+
+}
+
+span {
+  white-space:pre;
+}
+
+#Circuit_stat{
+  text-align: center;
+  display: grid;
+  grid-template-columns: 14vw 14vw 14vw 14vw 14vw 14vw 14vw ;
+  grid-template-rows: 8vh;
+  column-gap: 0px;
+  justify-content: center;
+}
+
+.containerBig{
+	display: grid;
+	grid-template-columns: 14vw 40vw 30vw 14vw;
+  grid-template-rows: 8vh 84vh 15vh  15vh 45vh;
+	column-gap: 0px;
+  row-gap: 0px;
+	justify-content: stretch;
+}
+
+td {
+	font-size:0.8vw;
+  cursor: pointer;
+}
+th {
+	font-size:0.8vw;
+}
+.first{
+	color: var(--Accent);
+}
+.second{
+	color: var(--Secondary);
+}
+
+.full-width {
+
+}
+.Header {
+	color: var(--Accent);
+	/*border: solid green 1px;    2vh*/
+
+}
+
+.axis--grid .domain {
+	fill: var(--shady2);
+	stroke: none;
+}
+
+.axis--x .domain,
+.axis--x .tick line,
+.axis--grid .tick line {
+	stroke: var(--Foreground);
+}
+
+canvas {
+width: 95% !important;
+height: auto !important;
+}
+
+
+.axis--x .tick text {
+	color: var(--Foreground);
+	font-weight: bold;
+}
+
+.axis--grid .tick--minor line {
+	stroke-opacity: 1;
+}
+
+
+.graticule {
+	fill: none;
+	stroke: var(--extreme1);
+	stroke-width: .5px;
+	stroke-opacity: 0;
+}
+.sphere {
+	fill: url(#linear);
+	fill-opacity: 1;
+	stroke: var(--extreme1);
+	stroke-width: 1px;
+	stroke-opacity: .5;
+}
+.country {
+	fill: var(--Midtone);
+	fill-opacity: 1;
+	stroke: var(--Foreground);
+	stroke-width: 1px;
+	vector-effect: non-scaling-stroke;
+}
+.tooltip {
+		position: absolute;
+		font-size: 12px;
+		width:  auto;
+		height: auto;
+		pointer-events: none;
+		background-color: var(--shady1);
+		border-radius: 4px;
+}
+
+.circle-hover {
+		stroke: var(--extreme1);
+		stroke-width: 2px;
+		vector-effect: non-scaling-stroke;
+}
+
+.circle-clicked {
+		fill: var(--extreme2);
+		stroke: var(--extreme1);
+		stroke-width: 2px;
+		vector-effect: non-scaling-stroke;
+}
+
+.plotaxis path,
+.plotaxis line {
+  fill: none;
+  stroke: var(--extreme1);
+}
+
+
+.icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+}
+.icon-mode-dark {
+  background-image: url(./Images/dark-mode.svg);
+}
+.icon-mode-light{
+  background-image: url(./Images/light-mode.svg);
+}
+
+rect.selection {
+  fill: var(--Accent);
+	opacity: 1;
+	stroke: var(--Accent);
+  vector-effect: non-scaling-stroke;
+}
+
+.st0{fill:#999;}
+.st1{fill:var(--extreme1);}
+
+svg.colored {
+  --light:var(--Foreground);
+  --dark:var(--Background);
+}

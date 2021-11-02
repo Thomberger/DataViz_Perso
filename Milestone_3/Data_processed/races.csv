@@ -1,28 +1,28 @@
 location,country,circuitId,year,name,lat,lng,alt,TOT
-Melbourne,Australia,1,2009,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2008,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2007,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2006,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2005,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2004,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2003,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2002,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2001,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2000,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,1999,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,1998,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,1997,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,1996,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2010,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2011,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2012,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2013,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2014,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2015,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2016,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2017,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2018,Albert Park Circuit,-37.8497,144.968,10,1.0
-Melbourne,Australia,1,2019,Albert Park Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2009,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2008,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2007,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2006,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2005,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2004,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2003,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2002,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2001,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2000,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,1999,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,1998,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,1997,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,1996,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2010,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2011,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2012,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2013,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2014,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2015,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2016,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2017,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2018,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
+Melbourne,Australia,1,2019,Albert Park Grand Prix Circuit,-37.8497,144.968,10,1.0
 Kuala Lumpur,Malaysia,2,2009,Sepang International Circuit,2.76083,101.738,18,1.0
 Kuala Lumpur,Malaysia,2,2008,Sepang International Circuit,2.76083,101.738,18,1.0
 Kuala Lumpur,Malaysia,2,2007,Sepang International Circuit,2.76083,101.738,18,1.0
@@ -450,37 +450,37 @@ Marina Bay,Singapore,15,2016,Marina Bay Street Circuit,1.2914,103.864,18,1.0
 Marina Bay,Singapore,15,2017,Marina Bay Street Circuit,1.2914,103.864,18,1.0
 Marina Bay,Singapore,15,2018,Marina Bay Street Circuit,1.2914,103.864,18,1.0
 Marina Bay,Singapore,15,2019,Marina Bay Street Circuit,1.2914,103.864,18,1.0
-Suzuka,Japan,22,2009,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2006,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2005,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2004,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2003,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2002,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2001,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2000,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1999,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1998,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1997,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1996,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1995,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1994,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1993,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1992,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1991,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1990,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2010,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1989,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1988,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,1987,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2011,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2012,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2013,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2014,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2015,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2016,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2017,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2018,Suzuka International Racing Course,34.8431,136.541,45,1.0
-Suzuka,Japan,22,2019,Suzuka International Racing Course,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2009,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2006,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2005,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2004,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2003,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2002,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2001,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2000,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1999,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1998,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1997,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1996,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1995,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1994,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1993,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1992,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1991,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1990,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2010,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1989,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1988,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,1987,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2011,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2012,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2013,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2014,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2015,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2016,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2017,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2018,Suzuka Circuit,34.8431,136.541,45,1.0
+Suzuka,Japan,22,2019,Suzuka Circuit,34.8431,136.541,45,1.0
 São Paulo,Brazil,18,2009,Autódromo José Carlos Pace,-23.7036,-46.6997,785,1.0
 São Paulo,Brazil,18,2008,Autódromo José Carlos Pace,-23.7036,-46.6997,785,1.0
 São Paulo,Brazil,18,2007,Autódromo José Carlos Pace,-23.7036,-46.6997,785,1.0
