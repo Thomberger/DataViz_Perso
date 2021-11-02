@@ -65,14 +65,14 @@ However, our approach is interesting as it focuses on another aspect of formula 
 ## Milestone 2 (7th May, 5pm)
 
 The report of milestone 2 can be found here: [Report pdf](/Milestone_2/Report_Milestone2.pdf)<br>
-The website of milestone 2 can be found here:  [Website skeleton](https://com-480-data-visualization.github.io/data-visualization-project-2021-the-looney-tunes/Milestone_2/index.html)
+The website of milestone 2 can be found here:  [Website skeleton](https://thomberger.github.io/DataViz_Perso/Milestone_2/index.html)
 
 
 ## Milestone 3 (4th June, 5pm)
 
 **80% of the final grade**
 
-To see the final website, you can visit the following [link](https://com-480-data-visualization.github.io/data-visualization-project-2021-the-looney-tunes/Milestone_3/index.html).
+To see the final website, you can visit the following [link](https://thomberger.github.io/DataViz_Perso/Milestone_3/index.html).
 
 The video showing how the visualization works can be found in the following [link](https://www.youtube.com/watch?v=TbKRwhvaats).
 
