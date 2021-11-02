@@ -2,7 +2,7 @@
 
 ## 🏎 Formula 1 Visualization 🏎️
 
-**To see the final website, you can visit the following [link](https://github.com/Thomberger/DataViz_Perso/Milestone_3/index.html).**
+**To see the final website, you can visit the following [link](https://thomberger.github.io/DataViz_Perso/Milestone_3/index.html).**
 
 
 [Milestone 1](#milestone-1-23rd-april-5pm) • [Milestone 2](#milestone-2-7th-may-5pm) • [Milestone 3](#milestone-3-4th-june-5pm)
